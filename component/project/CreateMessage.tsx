@@ -197,12 +197,12 @@ export default function CreateMessage({
 
       <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center lg:px-5 lg:py-5">
 
-        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-7xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
+        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
 
           {/* LEFT: REMINDER FORM */}
           <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:w-1/2 lg:px-10 lg:py-4">
 
-            <div className="mx-auto mb-4 w-full max-w-xl sm:mb-5">
+            <div className="mx-auto mb-3 w-full max-w-xl ">
 
               <div className="mb-4 flex items-center justify-between sm:mb-5">
                 <div className="flex items-center gap-3">
@@ -251,14 +251,6 @@ export default function CreateMessage({
             </div>
 
             {/* Project preview */}
-            <div className="mx-auto mb-3 flex w-full max-w-xl items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-2.5 sm:mb-4">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
-                <CheckCircle2 size={19} />
-              </div>
-
-
-              <Check size={16} className="ml-auto shrink-0 text-blue-400" />
-            </div>
 
             <form
               onSubmit={handleCreate}
