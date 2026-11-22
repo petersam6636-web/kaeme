@@ -164,10 +164,6 @@ export default function RegisterPage() {
 
             <div className="form-heading">
 
-              <span className="form-eyebrow">
-                {isRegister ? "WELCOME TO OI KAEME" : "WELCOME BACK"}
-              </span>
-
               <h2>
                 {isRegister ? (
                   <>
@@ -191,36 +187,6 @@ export default function RegisterPage() {
             {/* AUTH FORM */}
 
             <form onSubmit={handleSubmit} className="auth-form">
-
-              {isRegister && (
-                <div className="registration-fields">
-                  <div className="form-field">
-                    <label htmlFor="name">Full name</label>
-                    <input
-                      id="name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      autoComplete="name"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-field">
-                    <label htmlFor="username">Username</label>
-                    <input
-                      id="username"
-                      type="text"
-                      placeholder="Choose a username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      autoComplete="username"
-                      required
-                    />
-                  </div>
-                </div>
-              )}
 
               <div className="form-field">
                 <label htmlFor="email">Email address</label>
@@ -326,24 +292,9 @@ export default function RegisterPage() {
 
             {/* SWITCH AUTH MODE */}
 
-            <div className="auth-switch">
-              {isRegister
-                ? "Already have an account?"
-                : "Don't have an account?"}
 
-              <button
-                type="button"
-                onClick={() =>
-                  changeMode(isRegister ? "signin" : "register")
-                }
-              >
-                {isRegister ? "Sign in" : "Create account"}
-              </button>
-            </div>
 
-            <p className="form-terms">
-              By continuing, you agree to use Oi Kaeme responsibly.
-            </p>
+
 
             <div className="form-separator">
               <span />
@@ -387,6 +338,24 @@ export default function RegisterPage() {
               </span>
             </button>
 
+            <div className="auth-switch">
+              {isRegister
+                ? "Already have an account?"
+                : "Don't have an account?"}
+
+              <button
+                type="button"
+                onClick={() =>
+                  changeMode(isRegister ? "signin" : "register")
+                }
+              >
+                {isRegister ? "Sign in" : "Create account"}
+              </button>
+            </div>
+
+                        <p className="form-terms">
+              By continuing, you agree to use  Kaeme responsibly.
+            </p>
           </div>
 
         </section>
