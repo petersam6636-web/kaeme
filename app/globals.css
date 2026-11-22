@@ -128,16 +128,48 @@ select:-webkit-autofill:focus {
   position: relative;
   width: min(100%, 480px, 68svh);
   aspect-ratio: 1;
-  overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 14%);
   border-radius: 50%;
-  background: #050816;
-  box-shadow: 0 28px 72px rgb(0 0 0 / 42%);
+  isolation: isolate;
+}
+
+.register-illustration-frame::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 25deg,
+    #2563eb,
+    #22d3ee 22%,
+    #1d4ed8 44%,
+    #818cf8 66%,
+    #22d3ee 84%,
+    #2563eb
+  );
+  box-shadow: 0 0 22px rgb(37 99 235 / 42%);
+  content: "";
+  pointer-events: none;
+  animation: register-border-shine 4s linear 2s infinite;
+}
+
+.register-illustration-inner {
+  position: absolute;
+  z-index: 1;
+  inset: 14px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
 }
 
 .register-illustration {
   border-radius: 50%;
   object-fit: cover;
+}
+
+@keyframes register-border-shine {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .register-form-panel {

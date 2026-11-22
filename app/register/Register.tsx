@@ -37,7 +37,7 @@ export default function RegisterPage() {
     gsap.from('.register-page', {
         scale: 0,
         opacity: 0,
-        duration: 0.3
+        duration: 0.2
     })
   }, {dependencies: [mode]})
   
@@ -146,14 +146,16 @@ export default function RegisterPage() {
       <div className="register-shell">
         <section className="register-brand">
           <div className="register-illustration-frame">
-            <Image
-              src="/3d-user-login.avif"
-              alt="A 3D illustration of a user signing in"
-              fill
-              sizes="(min-width: 851px) 40vw, 0px"
-              priority
-              className="register-illustration"
-            />
+            <div className="register-illustration-inner">
+              <Image
+                src="/3d-user-login.avif"
+                alt="A 3D illustration of a user signing in"
+                fill
+                sizes="(min-width: 851px) 40vw, 0px"
+                priority
+                className="register-illustration"
+              />
+            </div>
           </div>
         </section>
 

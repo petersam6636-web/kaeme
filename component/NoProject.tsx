@@ -1,7 +1,43 @@
 
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { supabase } from "@/lib/supabase-client";
 
 export default function NoProject() {
+  const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(false);
+  const [authError, setAuthError] = useState("");
+
+  async function handleCreateReminder() {
+    setCheckingAuth(true);
+    setAuthError("");
+
+    try {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error) {
+        setAuthError("Unable to verify your sign-in. Please try again.");
+        return;
+      }
+
+      router.push(user ? "/project" : "/register");
+    } catch (error) {
+      setAuthError(
+        error instanceof Error
+          ? error.message
+          : "Unable to verify your sign-in. Please try again."
+      );
+    } finally {
+      setCheckingAuth(false);
+    }
+  }
+
   return (
     <section className="flex min-h-[100dvh] w-full items-center justify-center px-1.5 md:px-3">
       <div className="glass-panel flex min-h-[300px] w-full max-w-xl flex-col items-center justify-center rounded-2xl px-5 text-center text-zinc-100">
@@ -33,12 +69,21 @@ export default function NoProject() {
           Your projects will appear here once you create one.
         </p>
 
-        <Link
-          href="/project"
+        {authError && (
+          <p className="mt-4 text-sm text-red-300" role="alert">
+            {authError}
+          </p>
+        )}
+
+        <button
+          type="button"
+          onClick={handleCreateReminder}
+          disabled={checkingAuth}
+          aria-busy={checkingAuth}
           className="mt-6 inline-flex cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
         >
-          Get started
-        </Link>
+          {checkingAuth ? "Checking..." : "Create reminder"}
+        </button>
       </div>
     </section>
   );
