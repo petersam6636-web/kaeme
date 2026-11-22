@@ -134,7 +134,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="register-page w-full min-h-screen px-1.5 py-6 md:px-3 md:py-10">
+    <main className="register-page w-full min-h-screen px-1.5 py-4 md:px-3 md:py-6">
 
       <div className="register-shell">
 
@@ -228,8 +228,8 @@ export default function RegisterPage() {
                 C 290 190 190 65 0 0
                 Z
               "
-              fill="white"
-              fillOpacity="0.91"
+              fill="#0b1018"
+              fillOpacity="0.97"
             />
           </svg>
 
@@ -261,50 +261,6 @@ export default function RegisterPage() {
                   : "Sign in to continue where you left off."}
               </p>
 
-            </div>
-
-            {/* GOOGLE AUTH */}
-
-            <button
-              type="button"
-              onClick={handleGoogleAuth}
-              disabled={googleLoading || loading}
-              className="google-button"
-            >
-              {googleLoading ? (
-                <span className="button-spinner" />
-              ) : (
-                <svg viewBox="0 0 48 48" className="h-5 w-5">
-                  <path
-                    fill="#4285F4"
-                    d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11c-.5 2.5-1.9 4.6-4.1 6v5h6.7c3.9-3.6 6-8.7 6-14.7Z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M24 44c5.5 0 10.1-1.8 13.5-4.8l-6.7-5c-1.8 1.2-4 1.9-6.8 1.9-5.2 0-9.6-3.5-11.2-8.2H5.9v5.2C9.3 39.6 16.1 44 24 44Z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M12.8 27.9c-.4-1.2-.7-2.5-.7-3.9s.3-2.7.7-3.9v-5.2H5.9C4.5 17.7 3.7 20.8 3.7 24s.8 6.3 2.2 9.1l6.9-5.2Z"
-                  />
-                  <path
-                    fill="#EA4335"
-                    d="M24 11.9c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 5.9 29.5 4 24 4 16.1 4 9.3 8.4 5.9 14.9l6.9 5.2c1.6-4.7 6-8.2 11.2-8.2Z"
-                  />
-                </svg>
-              )}
-
-              <span>
-                {googleLoading
-                  ? "Connecting..."
-                  : "Continue with Google"}
-              </span>
-            </button>
-
-            <div className="form-separator">
-              <span />
-              <p>OR CONTINUE WITH EMAIL</p>
-              <span />
             </div>
 
             {/* AUTH FORM */}
@@ -463,6 +419,48 @@ export default function RegisterPage() {
             <p className="form-terms">
               By continuing, you agree to use Oi Kaeme responsibly.
             </p>
+
+            <div className="form-separator">
+              <span />
+              <p>OR</p>
+              <span />
+            </div>
+
+            {/* GOOGLE AUTH */}
+
+            <button
+              type="button"
+              onClick={handleGoogleAuth}
+              disabled={googleLoading || loading}
+              className="google-button"
+            >
+              {googleLoading ? (
+                <span className="button-spinner" />
+              ) : (
+                <svg viewBox="0 0 48 48" className="h-5 w-5">
+                  <path
+                    fill="#4285F4"
+                    d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11c-.5 2.5-1.9 4.6-4.1 6v5h6.7c3.9-3.6 6-8.7 6-14.7Z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M24 44c5.5 0 10.1-1.8 13.5-4.8l-6.7-5c-1.8 1.2-4 1.9-6.8 1.9-5.2 0-9.6-3.5-11.2-8.2H5.9v5.2C9.3 39.6 16.1 44 24 44Z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M12.8 27.9c-.4-1.2-.7-2.5-.7-3.9s.3-2.7.7-3.9v-5.2H5.9C4.5 17.7 3.7 20.8 3.7 24s.8 6.3 2.2 9.1l6.9-5.2Z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M24 11.9c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 5.9 29.5 4 24 4 16.1 4 9.3 8.4 5.9 14.9l6.9 5.2c1.6-4.7 6-8.2 11.2-8.2Z"
+                  />
+                </svg>
+              )}
+
+              <span>
+                {googleLoading ? "Connecting..." : "Continue with Google"}
+              </span>
+            </button>
 
           </div>
 

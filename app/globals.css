@@ -17,9 +17,9 @@ body {
   min-height: 100vh;
   background: var(--background);
   background-image:
-    radial-gradient(ellipse 75% 55% at 8% 0%, rgb(37 99 235 / 18%), transparent 68%),
-    radial-gradient(ellipse 55% 45% at 100% 24%, rgb(8 145 178 / 12%), transparent 68%),
-    radial-gradient(ellipse 60% 55% at 50% 100%, rgb(30 41 59 / 42%), transparent 72%);
+    radial-gradient(ellipse 75% 55% at 8% 0%, rgb(37 99 235 / 34%), transparent 68%),
+    radial-gradient(ellipse 55% 45% at 100% 24%, rgb(8 145 178 / 24%), transparent 68%),
+    radial-gradient(ellipse 60% 55% at 50% 100%, rgb(30 41 59 / 48%), transparent 72%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-bodoni-moda), serif;
@@ -103,7 +103,12 @@ select:-webkit-autofill:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #080808;
+  background-color: #050816;
+  background-image:
+    radial-gradient(ellipse 60% 75% at 12% 50%, rgb(37 99 235 / 42%), transparent 70%),
+    radial-gradient(ellipse 48% 55% at 92% 10%, rgb(14 165 233 / 28%), transparent 68%),
+    radial-gradient(ellipse 55% 52% at 80% 100%, rgb(79 70 229 / 28%), transparent 70%);
+  color: #f4f4f5;
 }
 
 .register-shell {
@@ -112,7 +117,7 @@ select:-webkit-autofill:focus {
   grid-template-columns: 0.88fr 1.12fr;
   width: 100%;
   max-width: 1180px;
-  min-height: 690px;
+  min-height: 650px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -211,7 +216,8 @@ select:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 65px 35px 80px 65px;
+  padding: 36px 36px 42px 44px;
+  color: #f4f4f5;
 }
 
 .register-panel-shape {
@@ -227,7 +233,7 @@ select:-webkit-autofill:focus {
   position: relative;
   width: 100%;
   max-width: 420px;
-  padding: 15px 0;
+  padding: 0;
 }
 
 /* =========================================
@@ -235,7 +241,7 @@ select:-webkit-autofill:focus {
 ========================================= */
 
 .form-heading {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
 }
 
 .form-eyebrow {
@@ -252,7 +258,7 @@ select:-webkit-autofill:focus {
   font-weight: 800;
   letter-spacing: -1.5px;
   line-height: 1.2;
-  color: #080808;
+  color: #f4f4f5;
 }
 
 .form-heading h2 span {
@@ -263,7 +269,7 @@ select:-webkit-autofill:focus {
   margin-top: 10px;
   font-size: 13px;
   line-height: 1.7;
-  color: #777;
+  color: #a1a1aa;
 }
 
 /* =========================================
@@ -277,18 +283,19 @@ select:-webkit-autofill:focus {
   gap: 12px;
   width: 100%;
   min-height: 48px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.65);
-  color: #171717;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f4f4f5;
   font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .google-button:hover:not(:disabled) {
-  border-color: #329fe9;
-  background: white;
+  border-color: rgba(96, 165, 250, 0.65);
+  background: rgba(59, 130, 246, 0.14);
   transform: translateY(-1px);
 }
 
@@ -306,13 +313,13 @@ select:-webkit-autofill:focus {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 23px 0;
+  margin: 16px 0;
 }
 
 .form-separator span {
   flex: 1;
   height: 1px;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .form-separator p {
@@ -320,7 +327,7 @@ select:-webkit-autofill:focus {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #929292;
+  color: #a1a1aa;
 }
 
 /* =========================================
@@ -330,7 +337,7 @@ select:-webkit-autofill:focus {
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .form-field {
@@ -342,29 +349,29 @@ select:-webkit-autofill:focus {
 .form-field label {
   font-size: 12px;
   font-weight: 650;
-  color: #292929;
+  color: #e4e4e7;
 }
 
 .form-field input {
   width: 100%;
   height: 47px;
   padding: 0 15px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(148, 163, 184, 0.38);
   border-radius: 11px;
   outline: none;
-  background: rgba(255, 255, 255, 0.7);
-  color: #111;
+  background: #080d14;
+  color: #f4f4f5;
   font-size: 13px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-field input::placeholder {
-  color: #aaa;
+  color: #8b95a5;
 }
 
 .form-field input:focus {
-  border-color: #329fe9;
-  box-shadow: 0 0 0 3px rgba(50, 159, 233, 0.11);
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 /* PASSWORD */
@@ -387,7 +394,7 @@ select:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
   transform: translateY(-50%);
-  color: #888;
+  color: #a1a1aa;
 }
 
 .password-toggle svg {
@@ -408,7 +415,7 @@ select:-webkit-autofill:focus {
 }
 
 .forgot-password a {
-  color: #258ed5;
+  color: #60a5fa;
   font-size: 11px;
   font-weight: 600;
 }
@@ -425,15 +432,15 @@ select:-webkit-autofill:focus {
 }
 
 .auth-error {
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  background: rgba(220, 38, 38, 0.06);
-  color: #b91c1c;
+  border: 1px solid rgba(248, 113, 113, 0.32);
+  background: rgba(127, 29, 29, 0.2);
+  color: #fecaca;
 }
 
 .auth-success {
-  border: 1px solid rgba(22, 163, 74, 0.2);
-  background: rgba(22, 163, 74, 0.06);
-  color: #15803d;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(20, 83, 45, 0.22);
+  color: #bbf7d0;
 }
 
 /* =========================================
@@ -449,7 +456,7 @@ select:-webkit-autofill:focus {
   min-height: 49px;
   margin-top: 5px;
   border-radius: 12px;
-  background: #080808;
+  background: #2563eb;
   color: white;
   font-size: 13px;
   font-weight: 700;
@@ -457,8 +464,8 @@ select:-webkit-autofill:focus {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #258ed5;
-  box-shadow: 0 8px 22px rgba(37, 142, 213, 0.2);
+  background: #1d4ed8;
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.28);
   transform: translateY(-2px);
 }
 
@@ -479,26 +486,26 @@ select:-webkit-autofill:focus {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  margin-top: 24px;
-  color: #777;
+  margin-top: 16px;
+  color: #cbd5e1;
   font-size: 12px;
 }
 
 .auth-switch button {
-  color: #258ed5;
+  color: #60a5fa;
   font-weight: 700;
   transition: color 0.2s;
 }
 
 .auth-switch button:hover {
-  color: #0874bc;
+  color: #93c5fd;
   text-decoration: underline;
 }
 
 .form-terms {
-  margin-top: 22px;
+  margin-top: 14px;
   text-align: center;
-  color: #999;
+  color: #a1a1aa;
   font-size: 10px;
   line-height: 1.7;
 }
@@ -534,7 +541,7 @@ select:-webkit-autofill:focus {
   }
 
   .register-form-panel {
-    padding: 55px 25px 70px 40px;
+    padding: 28px 24px;
   }
 
   .brand-description {
@@ -593,10 +600,10 @@ select:-webkit-autofill:focus {
     min-height: auto;
     padding: 30px 20px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 25px;
-    background: rgba(255, 255, 255, 0.91);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+    background: rgba(11, 16, 24, 0.97);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.38);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
   }
