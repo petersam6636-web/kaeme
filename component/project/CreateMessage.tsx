@@ -273,16 +273,6 @@ export default function CreateMessage({
                 </button>
               </div>
 
-              <div className="mb-3 flex items-center gap-2">
-                <span className="rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
-                  Step 02 / 02
-                </span>
-
-                <span className="text-xs text-zinc-500">
-                  Reminder configuration
-                </span>
-              </div>
-
               <div className="flex gap-2">
                 <div className="h-1 flex-1 rounded-full bg-blue-400" />
                 <div className="h-1 flex-1 rounded-full bg-blue-400" />

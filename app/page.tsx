@@ -8,6 +8,10 @@ import Loading from "@/component/Loading";
 import type { Day } from "@/types/day";
 import type { Project, ProjectRow } from "@/types/project";
 
+function getMetadataString(value: unknown): string | null {
+  return typeof value === "string" && value.trim() ? value : null;
+}
+
 async function HomeContent() {
   const supabase = await createSupabaseServerClient();
 
@@ -68,8 +72,27 @@ async function HomeContent() {
     ...project,
     days: daysByProject.get(project.id) ?? [],
   }));
+  const metadata = user.user_metadata;
+  const profile = {
+    name:
+      getMetadataString(metadata.full_name) ??
+      getMetadataString(metadata.name) ??
+      user.email ??
+      null,
+    email: user.email ?? null,
+    avatar_url:
+      getMetadataString(metadata.avatar_url) ??
+      getMetadataString(metadata.picture) ??
+      getMetadataString(metadata.avatar),
+  };
 
-  return <Decide projects={projectsWithDays} isAuthenticated />;
+  return (
+    <Decide
+      projects={projectsWithDays}
+      isAuthenticated
+      user={profile}
+    />
+  );
 }
 
 export default function HomePage() {

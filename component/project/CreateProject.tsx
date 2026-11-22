@@ -134,15 +134,6 @@ export default function CreateProject() {
                 </span>
               </div>
 
-              <div className="mb-4 flex items-center gap-2">
-                <span className="rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
-                  Step 01 / 02
-                </span>
-                <span className="text-xs text-zinc-500">
-                  Project information
-                </span>
-              </div>
-
               <div className="flex gap-2" aria-label="Step 1 of 2">
                 <div className="h-1 flex-1 rounded-full bg-blue-400" />
                 <div className="h-1 flex-1 rounded-full bg-white/10" />
@@ -194,7 +185,7 @@ export default function CreateProject() {
               <div>
                 <label
                   htmlFor="project-description"
-                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                  className=" block mb-1 text-xs font-semibold text-zinc-300"
                 >
                   Description
                 </label>
@@ -211,7 +202,7 @@ export default function CreateProject() {
                   rows={3}
                   maxLength={1000}
                   required
-                  className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                  className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-2 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                 />
                 <p className="mt-2 text-right text-[10px] text-zinc-600">
                   {project.description.length}/1000

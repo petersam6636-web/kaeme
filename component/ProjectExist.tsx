@@ -67,6 +67,7 @@ export default function ProjectExist({
         project.phone_number,
         project.message,
         project.status,
+        ...(project.days ?? []).map((day) => day.days),
       ].some((value) => value?.toLowerCase().includes(query))
     );
   }, [projects, search]);
@@ -114,28 +115,28 @@ export default function ProjectExist({
         return {
           label: "Sent",
           icon: CheckCircle2,
-          style: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
+          style: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
         };
 
       case "processing":
         return {
           label: "Processing",
           icon: LoaderCircle,
-          style: "bg-blue-500/10 text-blue-600 border-blue-500/20",
+          style: "bg-blue-500/10 text-blue-300 border-blue-500/20",
         };
 
       case "failed":
         return {
           label: "Failed",
           icon: AlertCircle,
-          style: "bg-red-500/10 text-red-500 border-red-500/20",
+          style: "bg-red-500/10 text-red-300 border-red-500/20",
         };
 
       default:
         return {
           label: "Pending",
           icon: Clock3,
-          style: "bg-zinc-500/10 text-zinc-500 border-zinc-500/20",
+          style: "bg-zinc-500/10 text-zinc-300 border-zinc-500/20",
         };
     }
   };
@@ -179,7 +180,8 @@ export default function ProjectExist({
   ).length;
 
   return (
-    <section className="w-full px-1.5 py-3 text-zinc-950 dark:text-white md:px-3">
+    <section className="min-h-[100dvh] w-full bg-[#050816] px-4 py-6 text-zinc-100 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl">
 
       {/* HEADER */}
       <header className="mb-8 flex items-center justify-between gap-4">
@@ -196,7 +198,8 @@ export default function ProjectExist({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search your reminders..."
-            className="w-full rounded-2xl border border-zinc-200 bg-white py-3 pl-11 pr-4 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+            aria-label="Search reminders"
+            className="w-full rounded-2xl border border-white/[0.08] bg-[#080d1b] py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
           />
         </div>
 
@@ -208,16 +211,17 @@ export default function ProjectExist({
             onClick={() => setProfileOpen(!profileOpen)}
             aria-label="Open profile menu"
             aria-expanded={profileOpen}
-            className="flex size-11 items-center justify-center overflow-hidden rounded-full border border-zinc-200 bg-zinc-100 transition hover:border-blue-500 dark:border-white/15 dark:bg-zinc-800"
+            className="flex size-11 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0b1020] transition hover:border-blue-400/50"
           >
             {user?.avatar_url ? (
               <img
                 src={user.avatar_url}
-                alt="Profile"
+                alt={user?.name ? `${user.name}'s profile` : "Profile"}
                 className="size-full object-cover"
+                referrerPolicy="no-referrer"
               />
             ) : (
-              <span className="font-semibold text-zinc-700 dark:text-white">
+              <span className="font-semibold text-blue-200">
                 {initials}
               </span>
             )}
@@ -232,10 +236,10 @@ export default function ProjectExist({
                 className="fixed inset-0 z-30 cursor-default"
               />
 
-              <div className="absolute right-0 top-14 z-40 w-64 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 dark:border-white/10 dark:bg-zinc-900">
+              <div className="absolute right-0 top-14 z-40 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
 
-                <div className="border-b border-zinc-100 p-4 dark:border-white/10">
-                  <p className="truncate text-sm font-semibold">
+                <div className="border-b border-white/10 p-4">
+                  <p className="truncate text-sm font-semibold text-white">
                     {user?.name || "Your Account"}
                   </p>
 
@@ -266,8 +270,8 @@ export default function ProjectExist({
 
         <div>
           <div className="mb-2 flex items-center gap-2">
-            <Bell size={19} className="text-blue-600" />
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-600">
+            <Bell size={19} className="text-blue-300" />
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-300">
               Reminder dashboard
             </span>
           </div>
@@ -293,10 +297,10 @@ export default function ProjectExist({
       {/* OVERVIEW */}
       <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-zinc-500">Total reminders</span>
-            <Bell size={18} className="text-blue-600" />
+            <Bell size={18} className="text-blue-300" />
           </div>
 
           <p className="mt-3 text-2xl font-bold tabular-nums">
@@ -308,10 +312,10 @@ export default function ProjectExist({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-zinc-500">Pending</span>
-            <Clock3 size={18} className="text-blue-600" />
+            <Clock3 size={18} className="text-blue-300" />
           </div>
 
           <p className="mt-3 text-2xl font-bold tabular-nums">
@@ -323,10 +327,10 @@ export default function ProjectExist({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-white/10 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-zinc-500">Successfully sent</span>
-            <Send size={18} className="text-blue-600" />
+            <Send size={18} className="text-blue-300" />
           </div>
 
           <p className="mt-3 text-2xl font-bold tabular-nums">
@@ -366,7 +370,7 @@ export default function ProjectExist({
             return (
               <article
                 key={project.id}
-                className="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/10 dark:bg-zinc-900"
+                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020] transition duration-300 hover:-translate-y-1 hover:border-blue-400/30 hover:shadow-xl hover:shadow-blue-500/5"
               >
 
                 {/* BLUE TOP ACCENT */}
@@ -379,7 +383,7 @@ export default function ProjectExist({
 
                     <div className="flex min-w-0 items-center gap-3">
 
-                      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-600">
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-400/10 text-blue-300">
                         <Bell size={23} />
                       </div>
 
@@ -393,7 +397,7 @@ export default function ProjectExist({
                             size={13}
                             className={
                               status.label === "Processing"
-                                ? "animate-spin text-blue-600"
+                                ? "animate-spin text-blue-300"
                                 : ""
                             }
                           />
@@ -426,10 +430,10 @@ export default function ProjectExist({
                   )}
 
                   {/* REMINDER INFORMATION */}
-                  <div className="mt-5 grid grid-cols-2 gap-4 border-y border-zinc-100 py-4 dark:border-white/10">
+                  <div className="mt-5 grid grid-cols-2 gap-4 border-y border-white/10 py-4">
 
                     <div className="flex items-start gap-3">
-                      <Clock3 size={18} className="mt-0.5 shrink-0 text-blue-600" />
+                      <Clock3 size={18} className="mt-0.5 shrink-0 text-blue-300" />
 
                       <div className="min-w-0">
                         <p className="text-sm font-semibold">
@@ -442,7 +446,7 @@ export default function ProjectExist({
                     </div>
 
                     <div className="flex items-start gap-3">
-                      <Phone size={18} className="mt-0.5 shrink-0 text-blue-600" />
+                      <Phone size={18} className="mt-0.5 shrink-0 text-blue-300" />
 
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold">
@@ -455,10 +459,10 @@ export default function ProjectExist({
                     </div>
 
                     <div className="col-span-2 flex items-start gap-3">
-                      <MessageSquare size={18} className="mt-0.5 shrink-0 text-blue-600" />
+                      <MessageSquare size={18} className="mt-0.5 shrink-0 text-blue-300" />
 
                       <div className="min-w-0">
-                        <p className="text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                        <p className="text-sm leading-6 text-zinc-300">
                           {project.message || "No reminder message provided."}
                         </p>
                         <p className="mt-1 text-xs text-zinc-400">
@@ -476,7 +480,7 @@ export default function ProjectExist({
                         Created on
                       </p>
                       <p className="mt-1 flex items-center gap-1.5 text-xs font-medium">
-                        <CalendarDays size={13} className="text-blue-600" />
+                        <CalendarDays size={13} className="text-blue-300" />
                         {formatDate(project.created_at)}
                       </p>
                     </div>
@@ -486,7 +490,7 @@ export default function ProjectExist({
                         Last sent
                       </p>
                       <p className="mt-1 flex items-center gap-1.5 text-xs font-medium">
-                        <Send size={13} className="text-blue-600" />
+                        <Send size={13} className="text-blue-300" />
                         {formatDate(
                           project.last_sent_at || project.sent_at
                         )}
@@ -495,19 +499,19 @@ export default function ProjectExist({
                   </div>
 
                   {/* EXPAND DAYS */}
-                  <div className="mt-5 border-t border-zinc-100 pt-4 dark:border-white/10">
+                  <div className="mt-5 border-t border-white/10 pt-4">
 
                     <button
                       type="button"
                       onClick={() => toggleDays(project.id)}
                       aria-expanded={isExpanded}
-                      className="flex w-full items-center justify-between rounded-xl py-2 text-sm font-semibold transition hover:text-blue-600"
+                      className="flex w-full items-center justify-between rounded-xl py-2 text-sm font-semibold transition hover:text-blue-300"
                     >
                       <span className="flex items-center gap-2">
-                        <CalendarDays size={17} className="text-blue-600" />
+                        <CalendarDays size={17} className="text-blue-300" />
                         Scheduled days
 
-                        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] text-blue-600">
+                        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] text-blue-300">
                           {days.length}
                         </span>
                       </span>
@@ -538,7 +542,7 @@ export default function ProjectExist({
                             days.map((day) => (
                               <span
                                 key={day.id}
-                                className="rounded-xl border border-blue-500/20 bg-blue-500/5 px-3 py-2 text-xs font-medium text-blue-700 dark:text-blue-400"
+                                className="rounded-xl border border-blue-400/20 bg-blue-400/5 px-3 py-2 text-xs font-medium text-blue-300"
                               >
                                 {day.days}
                               </span>
@@ -558,7 +562,7 @@ export default function ProjectExist({
 
                 {/* DELETE CONFIRMATION */}
                 {isDeleting && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/95 p-5 backdrop-blur-sm dark:bg-zinc-950/95">
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#080d1b]/95 p-5 backdrop-blur-sm">
 
                     <div className="w-full max-w-xs text-center">
 
@@ -572,7 +576,7 @@ export default function ProjectExist({
 
                       <p className="mt-2 text-sm leading-6 text-zinc-500">
                         Are you sure you want to delete{" "}
-                        <span className="font-semibold text-zinc-900 dark:text-white">
+                        <span className="font-semibold text-white">
                           {project.name}
                         </span>
                         ? This action cannot be undone.
@@ -584,7 +588,7 @@ export default function ProjectExist({
                           type="button"
                           disabled={deleting}
                           onClick={() => setDeleteId(null)}
-                          className="flex-1 rounded-xl border border-zinc-200 px-3 py-2.5 text-sm font-semibold transition hover:bg-zinc-100 disabled:opacity-50 dark:border-white/10 dark:hover:bg-white/5"
+                          className="flex-1 rounded-xl border border-white/10 px-3 py-2.5 text-sm font-semibold transition hover:bg-white/5 disabled:opacity-50"
                         >
                           Cancel
                         </button>
@@ -612,9 +616,9 @@ export default function ProjectExist({
       ) : (
 
         /* EMPTY SEARCH STATE */
-        <div className="rounded-2xl border border-dashed border-zinc-300 bg-white py-16 text-center dark:border-white/15 dark:bg-zinc-900">
+        <div className="rounded-2xl border border-dashed border-white/15 bg-[#0b1020] py-16 text-center">
 
-          <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600">
+          <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-2xl bg-blue-400/10 text-blue-300">
             {search ? <Search size={25} /> : <Bell size={25} />}
           </div>
 
@@ -641,6 +645,7 @@ export default function ProjectExist({
         </div>
       )}
 
+      </div>
     </section>
   );
 }
