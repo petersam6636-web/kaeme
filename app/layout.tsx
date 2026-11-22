@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "votesphere",
-  description: "Your votesphere application",
+  title: "Kaeme",
+  description: "Schedule your time to remind you",
 };
 
 
@@ -25,9 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bodoniModa.variable} ${geistMono.variable} bg-black h-full antialiased`}
+      className={`${bodoniModa.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex bg-black min-h-full flex-col">
+      <body className="flex min-h-full flex-col">
         <ContextFile>{children}</ContextFile>
       </body>
     </html>

@@ -7,7 +7,7 @@ export default function Loading() {
           <span className="loading-dot loading-dot-left" />
           <span className="loading-dot loading-dot-right" />
         </div>
-        <p className="text-sm font-medium tracking-wide text-black dark:text-white">Loading...</p>
+        <p className="text-sm font-medium tracking-wide text-zinc-100">Loading...</p>
       </div>
     </div>
   );
