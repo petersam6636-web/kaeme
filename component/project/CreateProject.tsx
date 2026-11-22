@@ -25,6 +25,7 @@ export default function CreateProject() {
     description: "",
   });
   const [showReminderForm, setShowReminderForm] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [error, setError] = useState("");
 
   const scene = useRef<HTMLDivElement>(null);
@@ -89,6 +90,11 @@ export default function CreateProject() {
       return;
     }
 
+    setShowConfirmation(true);
+  }
+
+  function confirmProjectDetails() {
+    setShowConfirmation(false);
     setShowReminderForm(true);
   }
 
@@ -109,7 +115,7 @@ export default function CreateProject() {
       </div>
 
       <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-2">
-        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
+        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
           <div className="relative flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-6 lg:w-1/2 lg:px-10 lg:py-5">
             <div className="mx-auto mb-3 w-full max-w-xl ">
               <div className="mb-3 flex items-center gap-3 ">
@@ -308,6 +314,68 @@ export default function CreateProject() {
           </div>
         </div>
       </section>
+
+      {showConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="confirm-project-title"
+            aria-describedby="confirm-project-description"
+            className="max-h-full w-full max-w-md overflow-y-auto rounded-2xl border border-blue-400/20 bg-[#0b1020] p-6 shadow-[0_20px_100px_rgba(0,0,0,0.6)] sm:rounded-3xl sm:p-8"
+          >
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
+              <CheckCircle2 size={24} />
+            </div>
+
+            <h2
+              id="confirm-project-title"
+              className="text-xl font-bold text-white"
+            >
+              Confirm project details
+            </h2>
+            <p
+              id="confirm-project-description"
+              className="mt-3 text-sm leading-6 text-zinc-400"
+            >
+              Review your project information before setting up the reminder.
+            </p>
+
+            <div className="mt-5 space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.035] p-4">
+              <div>
+                <p className="text-xs text-zinc-500">Project name</p>
+                <p className="mt-1 break-words text-sm font-medium text-white">
+                  {project.name}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-zinc-500">Description</p>
+                <p className="mt-1 whitespace-pre-wrap break-words text-sm text-zinc-300">
+                  {project.description}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => setShowConfirmation(false)}
+                className="flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:bg-white/[0.09] hover:text-white"
+              >
+                Review details
+              </button>
+              <button
+                type="button"
+                onClick={confirmProjectDetails}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500"
+              >
+                Continue
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
