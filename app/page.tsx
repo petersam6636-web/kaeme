@@ -38,7 +38,7 @@ async function HomeContent() {
 
 export default function HomePage() {
   return (
-    <main className="w-full px-1.5 md:px-3">
+    <main className="min-h-[100dvh] w-full">
       <Suspense fallback={<Loading />}>
         <HomeContent />
       </Suspense>

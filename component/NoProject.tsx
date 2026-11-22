@@ -1,8 +1,8 @@
 
 export default function NoProject() {
   return (
-    <section className="w-full px-1.5 md:px-3">
-      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-black/10 bg-white px-5 text-center dark:border-white/10 dark:bg-black">
+    <section className="flex min-h-[100dvh] w-full items-center justify-center px-1.5 md:px-3">
+      <div className="flex min-h-[300px] w-full max-w-xl flex-col items-center justify-center rounded-2xl border border-black/10 bg-white px-5 text-center dark:border-white/10 dark:bg-black">
 
         <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-black/10 dark:border-white/15">
           <svg

@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import { Sansita } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import ContextFile from "@/lib/ContextFile";
 
 import "./globals.css";
 
-const sanita = Sansita({
-  variable: "--font-sanita",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "700", "800", "900"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -21,9 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${sanita.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col">
         <ContextFile>{children}</ContextFile>
       </body>
     </html>
