@@ -195,7 +195,7 @@ export default function CreateMessage({
         <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center lg:px-5 lg:py-5">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-2">
 
         <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
 
