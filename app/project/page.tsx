@@ -22,7 +22,7 @@ async function ProjectContent() {
 
 export default function ProjectPage() {
   return (
-    <main className="min-h-[100dvh] w-full">
+    <main className="h-[100dvh] w-full overflow-hidden">
       <Suspense fallback={<Loading />}>
         <ProjectContent />
       </Suspense>
