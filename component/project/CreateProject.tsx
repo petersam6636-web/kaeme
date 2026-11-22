@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   FileText,
   MessageSquare,
+  Phone,
   Sparkles,
 } from "lucide-react";
 
@@ -17,12 +18,14 @@ import CreateMessage from "./CreateMessage";
 export interface ProjectDetails {
   name: string;
   description: string;
+  phone_number: string;
 }
 
 export default function CreateProject() {
   const [project, setProject] = useState<ProjectDetails>({
     name: "",
     description: "",
+    phone_number: "",
   });
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -85,8 +88,12 @@ export default function CreateProject() {
     event.preventDefault();
     setError("");
 
-    if (!project.name.trim() || !project.description.trim()) {
-      setError("Please enter a project name and description.");
+    if (
+      !project.name.trim() ||
+      !project.description.trim() ||
+      !project.phone_number.trim()
+    ) {
+      setError("Please enter a project name, description, and phone number.");
       return;
     }
 
@@ -145,7 +152,7 @@ export default function CreateProject() {
                 Create your project.
               </h1>
               <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
-                Give your reminder a name and tell us what you want to remember.
+                Add a project name, description, and the phone number for your reminder.
               </p>
             </div>
 
@@ -209,6 +216,37 @@ export default function CreateProject() {
                 <p className="mt-2 text-right text-[10px] text-zinc-600">
                   {project.description.length}/1000
                 </p>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="project-phone"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
+                  Phone number
+                </label>
+                <div className="group relative">
+                  <Phone
+                    size={17}
+                    aria-hidden="true"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
+                  />
+                  <input
+                    id="project-phone"
+                    type="tel"
+                    value={project.phone_number}
+                    onChange={(event) =>
+                      setProject((previous) => ({
+                        ...previous,
+                        phone_number: event.target.value,
+                      }))
+                    }
+                    placeholder="+233 XX XXX XXXX"
+                    maxLength={20}
+                    required
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-3 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                  />
+                </div>
               </div>
 
               {error && (
@@ -352,6 +390,12 @@ export default function CreateProject() {
                 <p className="text-xs text-zinc-500">Description</p>
                 <p className="mt-1 whitespace-pre-wrap break-words text-sm text-zinc-300">
                   {project.description}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-zinc-500">Phone number</p>
+                <p className="mt-1 break-words text-sm text-zinc-300">
+                  {project.phone_number}
                 </p>
               </div>
             </div>

@@ -5,6 +5,8 @@ import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 import Decide from "@/component/Decide";
 import Loading from "@/component/Loading";
+import type { Day } from "@/types/day";
+import type { Project, ProjectRow } from "@/types/project";
 
 async function HomeContent() {
   const supabase = await createSupabaseServerClient();
@@ -33,7 +35,41 @@ async function HomeContent() {
     return <Decide projects={[]} isAuthenticated />;
   }
 
-  return <Decide projects={projects ?? []} isAuthenticated />;
+  const projectRows: ProjectRow[] = projects ?? [];
+  const daysByProject = new Map<string, Day[]>();
+
+  if (projectRows.length > 0) {
+    const {
+      data: days,
+      error: daysError,
+    } = await supabase
+      .from("days")
+      .select("*")
+      .in(
+        "project_id",
+        projectRows.map((project) => project.id)
+      );
+
+    if (daysError) {
+      throw daysError;
+    }
+
+    for (const day of (days ?? []) as Day[]) {
+      const projectDays = daysByProject.get(day.project_id);
+      if (projectDays) {
+        projectDays.push(day);
+      } else {
+        daysByProject.set(day.project_id, [day]);
+      }
+    }
+  }
+
+  const projectsWithDays: Project[] = projectRows.map((project) => ({
+    ...project,
+    days: daysByProject.get(project.id) ?? [],
+  }));
+
+  return <Decide projects={projectsWithDays} isAuthenticated />;
 }
 
 export default function HomePage() {

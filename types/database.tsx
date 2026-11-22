@@ -1,7 +1,7 @@
 
 import type {
-  Project,
   ProjectInsert,
+  ProjectRow,
   ProjectUpdate,
 } from "./project";
 import type { Day, DayInsert } from "./day";
@@ -10,7 +10,7 @@ export type Database = {
   public: {
     Tables: {
       projects: {
-        Row: Project;
+        Row: ProjectRow;
         Insert: ProjectInsert;
         Update: ProjectUpdate;
         Relationships: [];

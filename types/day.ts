@@ -8,6 +8,6 @@ export interface Day {
 export type DayInsert = {
   id?: string;
   project_id: string;
-  day: string;
+  days: string;
   created_at?: string;
 };

@@ -15,7 +15,6 @@ import {
   ChevronDown,
   Clock3,
   MessageSquare,
-  Phone,
   Sparkles,
   Check,
 } from "lucide-react";
@@ -32,7 +31,6 @@ interface CreateMessageProps {
 
 interface ReminderDetails {
   time: string;
-  phone: string;
   message: string;
 }
 
@@ -54,7 +52,6 @@ export default function CreateMessage({
 
   const [reminder, setReminder] = useState<ReminderDetails>({
     time: "",
-    phone: "",
     message: "",
   });
 
@@ -146,7 +143,6 @@ export default function CreateMessage({
 
     if (
       !reminder.time ||
-      !reminder.phone.trim() ||
       !reminder.message.trim()
     ) {
       setError("Please complete all reminder information.");
@@ -178,7 +174,7 @@ export default function CreateMessage({
         name: project.name.trim(),
         description: project.description.trim(),
         schedule_time: reminder.time,
-        phone_number: reminder.phone.trim(),
+        phone_number: project.phone_number.trim(),
         message: reminder.message.trim(),
       };
 
@@ -204,7 +200,7 @@ export default function CreateMessage({
 
         const daysToInsert: DayInsert[] = selectedDays.map((day) => ({
           project_id: projectId,
-          day: day,
+          days: day,
         }));
         const { error: daysError } = await supabase
           .from("days")
@@ -297,8 +293,8 @@ export default function CreateMessage({
               </h1>
 
               <p className="mt-2 max-w-sm text-xs leading-5 text-zinc-400 sm:text-sm">
-                Add the phone number, message, reminder time, and any days you
-                want it to repeat.
+                Create a chat message, choose its reminder time, and select any
+                days you want it to repeat.
               </p>
             </div>
 
@@ -308,36 +304,6 @@ export default function CreateMessage({
               onSubmit={handleCreate}
               className="mx-auto flex w-full max-w-xl flex-col gap-3"
             >
-
-              {/* Phone */}
-              <div>
-                <label
-                  htmlFor="reminder-phone"
-                  className="mb-2 block text-xs font-semibold text-zinc-300"
-                >
-                  Phone number
-                </label>
-
-                <div className="group relative">
-                  <Phone
-                    size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
-                  />
-
-                  <input
-                    id="reminder-phone"
-                    type="tel"
-                    value={reminder.phone}
-                    onChange={(e) =>
-                      updateReminder("phone", e.target.value)
-                    }
-                    placeholder="+233 XX XXX XXXX"
-                    maxLength={20}
-                    required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
-                  />
-                </div>
-              </div>
 
               {/* Message */}
               <div>
@@ -361,10 +327,10 @@ export default function CreateMessage({
                       updateReminder("message", e.target.value)
                     }
                     placeholder="What would you like to be reminded about?"
-                    rows={4}
+                    rows={3}
                     maxLength={1000}
                     required
-                    className="min-h-28 w-full resize-y rounded-xl border border-white/[0.09] bg-white/[0.035] py-3 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="min-h-24 w-full resize-y rounded-xl border border-white/[0.09] bg-white/[0.035] py-3 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>

@@ -1,4 +1,6 @@
 
+import type { Day } from "./day";
+
 export type ProjectStatus =
   | "pending"
   | "processing"
@@ -16,7 +18,10 @@ export interface Project {
   status: ProjectStatus;
   created_at: string;
   sent_at: string | null;
+  days: Day[];
 }
+
+export type ProjectRow = Omit<Project, "days">;
 
 export type ProjectInsert = {
   id?: string;
@@ -31,5 +36,5 @@ export type ProjectInsert = {
 };
 
 export type ProjectUpdate = Partial<
-  Omit<Project, "id" | "user_id">
+  Omit<Project, "id" | "user_id" | "days">
 >;
