@@ -166,17 +166,17 @@ export default function CreateMessage({
   }
 
   return (
-    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050b08] text-white">
+    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
 
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-[450px] w-[450px] rounded-full bg-emerald-500/[0.09] blur-[130px]" />
-        <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-green-500/[0.08] blur-[130px]" />
+        <div className="absolute -left-40 -top-40 h-[450px] w-[450px] rounded-full bg-blue-500/[0.12] blur-[130px]" />
+        <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
       <section className="relative z-10 flex min-h-[100dvh] w-full items-stretch justify-center lg:min-h-0 lg:px-5 lg:py-5">
 
-        <div className="flex min-h-[100dvh] w-full max-w-7xl flex-col overflow-hidden border-white/[0.08] bg-[#08120d]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:min-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:border">
+        <div className="flex min-h-[100dvh] w-full max-w-7xl flex-col overflow-hidden border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:min-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:border">
 
           {/* LEFT: REMINDER FORM */}
           <div className="flex w-full flex-1 flex-col justify-center px-6 py-10 sm:px-10 lg:w-1/2 lg:px-14">
@@ -185,7 +185,7 @@ export default function CreateMessage({
 
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
                     <Bell size={19} />
                   </div>
 
@@ -197,7 +197,7 @@ export default function CreateMessage({
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-zinc-400 transition-all hover:bg-white/[0.06] hover:text-emerald-300"
+                  className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold text-zinc-400 transition-all hover:bg-white/[0.06] hover:text-blue-300"
                 >
                   <ArrowLeft size={15} />
                   Back
@@ -205,7 +205,7 @@ export default function CreateMessage({
               </div>
 
               <div className="mb-4 flex items-center gap-2">
-                <span className="rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300">
+                <span className="rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
                   Step 02 / 02
                 </span>
 
@@ -215,8 +215,8 @@ export default function CreateMessage({
               </div>
 
               <div className="flex gap-2">
-                <div className="h-1 flex-1 rounded-full bg-emerald-400" />
-                <div className="h-1 flex-1 rounded-full bg-emerald-400" />
+                <div className="h-1 flex-1 rounded-full bg-blue-400" />
+                <div className="h-1 flex-1 rounded-full bg-blue-400" />
               </div>
 
               <h1 className="mt-7 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -230,13 +230,13 @@ export default function CreateMessage({
             </div>
 
             {/* Project preview */}
-            <div className="mb-6 flex items-center gap-3 rounded-xl border border-emerald-400/15 bg-emerald-400/[0.045] p-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300">
+            <div className="mb-6 flex items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
                 <CheckCircle2 size={19} />
               </div>
 
               <div className="min-w-0">
-                <p className="truncate text-xs font-semibold text-emerald-300">
+                <p className="truncate text-xs font-semibold text-blue-300">
                   {project.name}
                 </p>
                 <p className="mt-1 truncate text-[10px] text-zinc-500">
@@ -244,7 +244,7 @@ export default function CreateMessage({
                 </p>
               </div>
 
-              <Check size={16} className="ml-auto shrink-0 text-emerald-400" />
+              <Check size={16} className="ml-auto shrink-0 text-blue-400" />
             </div>
 
             <form onSubmit={handleCreate} className="flex flex-col gap-5">
@@ -258,7 +258,7 @@ export default function CreateMessage({
                 <div className="group relative">
                   <Clock3
                     size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-emerald-400"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
                   />
 
                   <input
@@ -268,7 +268,7 @@ export default function CreateMessage({
                       updateReminder("time", e.target.value)
                     }
                     required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-emerald-400/30 focus:border-emerald-400/50 focus:ring-4 focus:ring-emerald-400/[0.06]"
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function CreateMessage({
                 <div className="group relative">
                   <Phone
                     size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-emerald-400"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
                   />
 
                   <input
@@ -294,7 +294,7 @@ export default function CreateMessage({
                     placeholder="+233 XX XXX XXXX"
                     maxLength={20}
                     required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-emerald-400/30 focus:border-emerald-400/50 focus:ring-4 focus:ring-emerald-400/[0.06]"
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ export default function CreateMessage({
                     rows={3}
                     maxLength={1000}
                     required
-                    className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] py-3.5 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-emerald-400/30 focus:border-emerald-400/50 focus:ring-4 focus:ring-emerald-400/[0.06]"
+                    className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] py-3.5 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -332,7 +332,7 @@ export default function CreateMessage({
               <button
                 type="submit"
                 disabled={loading}
-                className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-emerald-500 px-5 py-4 text-sm font-bold text-[#041009] shadow-[0_8px_30px_rgba(16,185,129,0.15)] transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-400 hover:shadow-[0_10px_35px_rgba(16,185,129,0.3)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
+                className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-4 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-1 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? "Creating reminder..." : "Create reminder"}
 
@@ -353,27 +353,27 @@ export default function CreateMessage({
           {/* RIGHT: ANIMATED SCENE */}
           <div
             ref={scene}
-            className="relative hidden w-1/2 items-center justify-center overflow-hidden border-l border-white/[0.06] bg-[#07140d] lg:flex"
+            className="relative hidden w-1/2 items-center justify-center overflow-hidden border-l border-white/[0.06] bg-[#080d1b] lg:flex"
           >
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-500/[0.09] blur-[110px]" />
+              <div className="absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.12] blur-[110px]" />
             </div>
 
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(110,231,183,0.35)_1px,transparent_1px)] bg-[size:25px_25px] opacity-[0.17]" />
 
             <div
               ref={orb1}
-              className="absolute left-[15%] top-[17%] h-24 w-24 rounded-full border border-emerald-300/20 bg-emerald-300/[0.07] shadow-[inset_0_0_25px_rgba(52,211,153,0.12),0_0_50px_rgba(16,185,129,0.08)] backdrop-blur-xl"
+              className="absolute left-[15%] top-[17%] h-24 w-24 rounded-full border border-blue-300/20 bg-blue-300/[0.07] shadow-[inset_0_0_25px_rgba(96,165,250,0.12),0_0_50px_rgba(37,99,235,0.08)] backdrop-blur-xl"
             />
 
             <div
               ref={orb2}
-              className="absolute bottom-[17%] right-[12%] h-36 w-36 rounded-full border border-emerald-300/20 bg-emerald-400/[0.06] shadow-[inset_0_0_35px_rgba(52,211,153,0.14),0_0_70px_rgba(16,185,129,0.1)] backdrop-blur-xl"
+              className="absolute bottom-[17%] right-[12%] h-36 w-36 rounded-full border border-blue-300/20 bg-blue-400/[0.06] shadow-[inset_0_0_35px_rgba(96,165,250,0.14),0_0_70px_rgba(37,99,235,0.1)] backdrop-blur-xl"
             />
 
             <div
               ref={orb3}
-              className="absolute right-[15%] top-[23%] h-12 w-12 rounded-full border border-emerald-200/30 bg-emerald-200/10 shadow-[0_0_30px_rgba(52,211,153,0.2)]"
+              className="absolute right-[15%] top-[23%] h-12 w-12 rounded-full border border-sky-200/30 bg-sky-200/10 shadow-[0_0_30px_rgba(56,189,248,0.2)]"
             />
 
             {/* Center */}
@@ -383,30 +383,30 @@ export default function CreateMessage({
                 ref={centerIcon}
                 className="relative mb-10 flex h-40 w-40 items-center justify-center"
               >
-                <div className="absolute inset-0 rounded-full border border-emerald-300/10" />
-                <div className="absolute inset-3 rounded-full border border-emerald-300/15" />
-                <div className="absolute inset-7 rounded-full border border-emerald-300/20 bg-emerald-400/[0.04] shadow-[0_0_70px_rgba(16,185,129,0.12)]" />
+                <div className="absolute inset-0 rounded-full border border-blue-300/10" />
+                <div className="absolute inset-3 rounded-full border border-blue-300/15" />
+                <div className="absolute inset-7 rounded-full border border-blue-300/20 bg-blue-400/[0.04] shadow-[0_0_70px_rgba(37,99,235,0.12)]" />
 
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-[26px] border border-emerald-300/30 bg-gradient-to-br from-emerald-300/20 to-emerald-900/40 text-emerald-300 shadow-[0_0_50px_rgba(16,185,129,0.2)] backdrop-blur-2xl">
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-[26px] border border-blue-300/30 bg-gradient-to-br from-blue-300/20 to-blue-900/40 text-blue-300 shadow-[0_0_50px_rgba(37,99,235,0.2)] backdrop-blur-2xl">
                   <CalendarClock size={38} strokeWidth={1.3} />
                 </div>
 
-                <div className="absolute right-1 top-3 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-300/20 bg-[#10251a] text-emerald-300 shadow-lg">
+                <div className="absolute right-1 top-3 flex h-9 w-9 items-center justify-center rounded-xl border border-blue-300/20 bg-[#111c33] text-blue-300 shadow-lg">
                   <Sparkles size={16} />
                 </div>
 
-                <div className="absolute bottom-3 left-0 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-300/20 bg-[#10251a] text-emerald-300 shadow-lg">
+                <div className="absolute bottom-3 left-0 flex h-9 w-9 items-center justify-center rounded-xl border border-blue-300/20 bg-[#111c33] text-blue-300 shadow-lg">
                   <CheckCircle2 size={17} />
                 </div>
               </div>
 
-              <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-emerald-300/80">
+              <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-blue-300/80">
                 Never miss what matters
               </span>
 
               <h2 className="max-w-md text-3xl font-bold leading-tight tracking-tight text-white">
                 Your moments,
-                <span className="block text-emerald-300">
+                <span className="block text-blue-300">
                   always remembered.
                 </span>
               </h2>
@@ -417,7 +417,7 @@ export default function CreateMessage({
               </p>
 
               <div className="mt-10 flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.035] px-5 py-4 shadow-2xl backdrop-blur-xl">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-400/10 text-emerald-300">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
                   <MessageSquare size={18} />
                 </div>
 
@@ -430,7 +430,7 @@ export default function CreateMessage({
                   </p>
                 </div>
 
-                <div className="ml-4 h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+                <div className="ml-4 h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.8)]" />
               </div>
             </div>
 
@@ -444,9 +444,9 @@ export default function CreateMessage({
       {/* SUCCESS */}
       {success && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 backdrop-blur-md">
-          <div className="w-full max-w-sm rounded-3xl border border-emerald-400/20 bg-[#0b1710] p-8 text-center shadow-[0_20px_100px_rgba(0,0,0,0.6)]">
+          <div className="w-full max-w-sm rounded-3xl border border-blue-400/20 bg-[#0b1020] p-8 text-center shadow-[0_20px_100px_rgba(0,0,0,0.6)]">
 
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-emerald-400/25 bg-emerald-400/10 text-emerald-300 shadow-[0_0_35px_rgba(16,185,129,0.15)]">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-blue-400/25 bg-blue-400/10 text-blue-300 shadow-[0_0_35px_rgba(37,99,235,0.2)]">
               <CheckCircle2 size={32} />
             </div>
 
@@ -462,7 +462,7 @@ export default function CreateMessage({
             <button
               type="button"
               onClick={() => router.push("/home")}
-              className="mt-7 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-bold text-[#041009] transition-all hover:bg-emerald-400"
+              className="mt-7 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-blue-500"
             >
               Go to dashboard
               <ArrowRight size={17} />

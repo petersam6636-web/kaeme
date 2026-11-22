@@ -1,7 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { ArrowRight, Bell, FileText } from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import gsap from "gsap";
+import {
+  ArrowRight,
+  Bell,
+  CalendarClock,
+  CheckCircle2,
+  FileText,
+  MessageSquare,
+  Sparkles,
+} from "lucide-react";
 
 import CreateMessage from "./CreateMessage";
 
@@ -17,6 +26,59 @@ export default function CreateProject() {
   });
   const [showReminderForm, setShowReminderForm] = useState(false);
   const [error, setError] = useState("");
+
+  const scene = useRef<HTMLDivElement>(null);
+  const orb1 = useRef<HTMLDivElement>(null);
+  const orb2 = useRef<HTMLDivElement>(null);
+  const orb3 = useRef<HTMLDivElement>(null);
+  const centerIcon = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const context = gsap.context(() => {
+      [
+        { element: orb1.current, y: -22, x: 12, duration: 4 },
+        { element: orb2.current, y: 22, x: -12, duration: 5 },
+        { element: orb3.current, y: -15, x: 10, duration: 3.5 },
+      ].forEach(({ element, y, x, duration }) => {
+        if (!element) return;
+
+        gsap.to(element, {
+          y,
+          x,
+          duration,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      });
+
+      if (centerIcon.current) {
+        gsap.to(centerIcon.current, {
+          y: -10,
+          rotate: -4,
+          duration: 3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+
+      if (scene.current) {
+        gsap.fromTo(
+          scene.current,
+          { opacity: 0, scale: 0.96 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 1,
+            ease: "power3.out",
+          }
+        );
+      }
+    });
+
+    return () => context.revert();
+  }, []);
 
   function handleContinue(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,115 +102,208 @@ export default function CreateProject() {
   }
 
   return (
-    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050b08] px-4 py-10 text-white sm:px-6">
+    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-[450px] w-[450px] rounded-full bg-emerald-500/[0.09] blur-[130px]" />
-        <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.08] blur-[140px]" />
+        <div className="absolute -left-40 -top-40 h-[450px] w-[450px] rounded-full bg-blue-500/[0.12] blur-[130px]" />
+        <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-sky-500/[0.1] blur-[140px]" />
       </div>
 
-      <section className="relative z-10 w-full max-w-xl rounded-3xl border border-white/[0.08] bg-[#08120d]/90 p-6 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:p-10">
-        <div className="mb-8 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
-            <Bell size={19} />
+      <section className="relative z-10 flex min-h-[100dvh] w-full items-stretch justify-center lg:items-center lg:px-5 lg:py-5">
+        <div className="flex min-h-[100dvh] w-full max-w-7xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:min-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
+          <div className="relative flex w-full flex-1 flex-col justify-center px-6 py-10 sm:px-10 lg:w-1/2 lg:px-14">
+            <div className="mb-8">
+              <div className="mb-8 flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
+                  <Bell size={19} />
+                </div>
+                <span className="text-lg font-bold tracking-tight">
+                  Easeway
+                </span>
+              </div>
+
+              <div className="mb-4 flex items-center gap-2">
+                <span className="rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
+                  Step 01 / 02
+                </span>
+                <span className="text-xs text-zinc-500">
+                  Project information
+                </span>
+              </div>
+
+              <div className="flex gap-2" aria-label="Step 1 of 2">
+                <div className="h-1 flex-1 rounded-full bg-blue-400" />
+                <div className="h-1 flex-1 rounded-full bg-white/10" />
+              </div>
+
+              <h1 className="mt-7 text-3xl font-bold tracking-tight sm:text-4xl">
+                Create your project.
+              </h1>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
+                Give your reminder a name and tell us what you want to remember.
+              </p>
+            </div>
+
+            <form onSubmit={handleContinue} className="flex flex-col gap-5">
+              <div>
+                <label
+                  htmlFor="project-name"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
+                  Project name
+                </label>
+                <div className="group relative">
+                  <FileText
+                    size={17}
+                    aria-hidden="true"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
+                  />
+                  <input
+                    id="project-name"
+                    type="text"
+                    value={project.name}
+                    onChange={(event) =>
+                      setProject((previous) => ({
+                        ...previous,
+                        name: event.target.value,
+                      }))
+                    }
+                    placeholder="e.g. Weekly meeting"
+                    maxLength={100}
+                    required
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="project-description"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="project-description"
+                  value={project.description}
+                  onChange={(event) =>
+                    setProject((previous) => ({
+                      ...previous,
+                      description: event.target.value,
+                    }))
+                  }
+                  placeholder="What is this reminder about?"
+                  rows={4}
+                  maxLength={1000}
+                  required
+                  className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                />
+                <p className="mt-2 text-right text-[10px] text-zinc-600">
+                  {project.description.length}/1000
+                </p>
+              </div>
+
+              {error && (
+                <p role="alert" className="text-xs text-red-400">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-4 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
+              >
+                Continue
+                <ArrowRight
+                  size={17}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </button>
+            </form>
+
+            <p className="mt-8 text-center text-[10px] tracking-[0.18em] text-zinc-600">
+              YOUR TIME MATTERS. LET EASEWAY HELP YOU REMEMBER.
+            </p>
           </div>
-          <span className="text-lg font-bold tracking-tight">Easeway</span>
-        </div>
 
-        <div className="mb-3 flex items-center gap-2">
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/[0.08] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
-            Step 1 of 2
-          </span>
-          <span className="text-xs text-zinc-500">Project information</span>
-        </div>
+          <div
+            ref={scene}
+            className="relative hidden w-1/2 items-center justify-center overflow-hidden border-l border-white/[0.06] bg-[#080d1b] lg:flex"
+          >
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.12] blur-[110px]" />
+              <div className="absolute -right-20 top-10 h-72 w-72 rounded-full bg-sky-400/[0.08] blur-[100px]" />
+              <div className="absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-indigo-700/[0.12] blur-[100px]" />
+            </div>
 
-        <div className="mt-4 flex gap-2" aria-label="Step 1 of 2">
-          <div className="h-1 flex-1 rounded-full bg-emerald-400" />
-          <div className="h-1 flex-1 rounded-full bg-white/10" />
-        </div>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(147,197,253,0.35)_1px,transparent_1px)] bg-[size:25px_25px] opacity-[0.17]" />
 
-        <h1 className="mt-7 text-3xl font-bold tracking-tight sm:text-4xl">
-          Create your project.
-        </h1>
-        <p className="mt-3 text-sm leading-6 text-zinc-400">
-          Give your reminder a name and tell us what you want to remember.
-        </p>
+            <div
+              ref={orb1}
+              className="absolute left-[15%] top-[17%] h-24 w-24 rounded-full border border-blue-300/20 bg-blue-300/[0.07] shadow-[inset_0_0_25px_rgba(96,165,250,0.12),0_0_50px_rgba(37,99,235,0.08)] backdrop-blur-xl"
+            />
+            <div
+              ref={orb2}
+              className="absolute bottom-[17%] right-[12%] h-36 w-36 rounded-full border border-blue-300/20 bg-blue-400/[0.06] shadow-[inset_0_0_35px_rgba(96,165,250,0.14),0_0_70px_rgba(37,99,235,0.1)] backdrop-blur-xl"
+            />
+            <div
+              ref={orb3}
+              className="absolute right-[15%] top-[23%] h-12 w-12 rounded-full border border-sky-200/30 bg-sky-200/10 shadow-[0_0_30px_rgba(56,189,248,0.2)]"
+            />
 
-        <form onSubmit={handleContinue} className="mt-8 flex flex-col gap-5">
-          <div>
-            <label
-              htmlFor="project-name"
-              className="mb-2 block text-xs font-semibold text-zinc-300"
-            >
-              Project name
-            </label>
-            <div className="group relative">
-              <FileText
-                size={17}
-                aria-hidden="true"
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-emerald-400"
-              />
-              <input
-                id="project-name"
-                type="text"
-                value={project.name}
-                onChange={(event) =>
-                  setProject((previous) => ({
-                    ...previous,
-                    name: event.target.value,
-                  }))
-                }
-                placeholder="e.g. Weekly meeting"
-                maxLength={100}
-                required
-                className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-3.5 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-zinc-600 hover:border-white/20 focus:border-emerald-400/50 focus:ring-4 focus:ring-emerald-400/[0.06]"
-              />
+            <div className="relative z-10 flex w-full max-w-lg flex-col items-center px-8 text-center">
+              <div
+                ref={centerIcon}
+                className="relative mb-10 flex h-40 w-40 items-center justify-center"
+              >
+                <div className="absolute inset-0 rounded-full border border-blue-300/10" />
+                <div className="absolute inset-3 rounded-full border border-blue-300/15" />
+                <div className="absolute inset-7 rounded-full border border-blue-300/20 bg-blue-400/[0.04] shadow-[0_0_70px_rgba(37,99,235,0.12)]" />
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-[26px] border border-blue-300/30 bg-gradient-to-br from-blue-300/20 to-blue-900/40 text-blue-300 shadow-[0_0_50px_rgba(37,99,235,0.2)] backdrop-blur-2xl">
+                  <CalendarClock size={38} strokeWidth={1.3} />
+                </div>
+                <div className="absolute right-1 top-3 flex h-9 w-9 items-center justify-center rounded-xl border border-blue-300/20 bg-[#111c33] text-blue-300 shadow-lg">
+                  <Sparkles size={16} />
+                </div>
+                <div className="absolute bottom-3 left-0 flex h-9 w-9 items-center justify-center rounded-xl border border-blue-300/20 bg-[#111c33] text-blue-300 shadow-lg">
+                  <CheckCircle2 size={17} />
+                </div>
+              </div>
+
+              <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-blue-300/80">
+                Never miss what matters
+              </span>
+              <h2 className="max-w-md text-3xl font-bold leading-tight tracking-tight text-white">
+                Your moments,
+                <span className="block text-blue-300">
+                  always remembered.
+                </span>
+              </h2>
+              <p className="mt-5 max-w-sm text-sm leading-7 text-zinc-400">
+                A simple reminder today can make tomorrow a little easier. Let
+                Easeway keep you on track.
+              </p>
+
+              <div className="mt-10 flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.035] px-5 py-4 shadow-2xl backdrop-blur-xl">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
+                  <MessageSquare size={18} />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs font-semibold text-white">
+                    A reminder that matters.
+                  </p>
+                  <p className="mt-1 text-[10px] text-zinc-500">
+                    Your time. Your priorities.
+                  </p>
+                </div>
+                <div className="ml-4 h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.8)]" />
+              </div>
+            </div>
+
+            <div className="absolute bottom-7 text-center text-[9px] tracking-[0.3em] text-zinc-600">
+              SIMPLE. SMART. EFFORTLESS.
             </div>
           </div>
-
-          <div>
-            <label
-              htmlFor="project-description"
-              className="mb-2 block text-xs font-semibold text-zinc-300"
-            >
-              Description
-            </label>
-            <textarea
-              id="project-description"
-              value={project.description}
-              onChange={(event) =>
-                setProject((previous) => ({
-                  ...previous,
-                  description: event.target.value,
-                }))
-              }
-              placeholder="What is this reminder about?"
-              rows={4}
-              maxLength={1000}
-              required
-              className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-white/20 focus:border-emerald-400/50 focus:ring-4 focus:ring-emerald-400/[0.06]"
-            />
-            <p className="mt-2 text-right text-[10px] text-zinc-600">
-              {project.description.length}/1000
-            </p>
-          </div>
-
-          {error && (
-            <p role="alert" className="text-xs text-red-400">
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            className="group mt-2 flex w-full items-center justify-center gap-3 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-bold text-[#041009] transition-all hover:-translate-y-0.5 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
-          >
-            Continue
-            <ArrowRight
-              size={17}
-              className="transition-transform group-hover:translate-x-1"
-            />
-          </button>
-        </form>
+        </div>
       </section>
     </main>
   );
