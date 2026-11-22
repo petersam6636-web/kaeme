@@ -1,7 +1,10 @@
 
+import { Suspense } from "react";
+
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 import Decide from "@/component/Decide";
+import Loading from "@/component/Loading";
 
 async function HomeContent() {
   const supabase = await createSupabaseServerClient();
@@ -36,7 +39,9 @@ async function HomeContent() {
 export default function HomePage() {
   return (
     <main className="w-full px-1.5 md:px-3">
-      <HomeContent />
+      <Suspense fallback={<Loading />}>
+        <HomeContent />
+      </Suspense>
     </main>
   );
 }
