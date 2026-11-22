@@ -256,14 +256,6 @@ export default function CreateMessage({
                 <CheckCircle2 size={19} />
               </div>
 
-              <div className="min-w-0">
-                <p className="truncate text-xs font-semibold text-blue-300">
-                  {project.name}
-                </p>
-                <p className="mt-1 truncate text-[10px] text-zinc-500">
-                  Project information completed
-                </p>
-              </div>
 
               <Check size={16} className="ml-auto shrink-0 text-blue-400" />
             </div>
