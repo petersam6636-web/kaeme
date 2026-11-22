@@ -15,7 +15,7 @@ export default function ProjectExist({
         {projects.map((project) => (
           <article
             key={project.id}
-            className="glass-panel rounded-2xl p-5 text-zinc-100 transition duration-200 hover:-translate-y-0.5 hover:border-blue-300/20 hover:bg-white/[0.06]"
+            className="glass-panel rounded-2xl p-5 text-zinc-100 transition duration-200 hover:-translate-y-0.5 hover:border-blue-300/35"
           >
             <div className="flex items-start justify-between gap-3">
               <h2 className="text-base font-semibold">
@@ -28,21 +28,21 @@ export default function ProjectExist({
             </div>
 
             {project.description && (
-              <p className="mt-3 text-sm leading-6 text-zinc-400">
+              <p className="mt-3 text-sm leading-6 text-zinc-300">
                 {project.description}
               </p>
             )}
 
             <div className="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
               <p>
-                <span className="text-zinc-400">
+                <span className="text-zinc-300">
                   Scheduled:
                 </span>{" "}
                 {new Date(project.schedule_time).toLocaleString()}
               </p>
 
               <p>
-                <span className="text-zinc-400">
+                <span className="text-zinc-300">
                   Phone:
                 </span>{" "}
                 {project.phone_number}

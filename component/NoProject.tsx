@@ -6,7 +6,7 @@ export default function NoProject() {
     <section className="flex min-h-[100dvh] w-full items-center justify-center px-1.5 md:px-3">
       <div className="glass-panel flex min-h-[300px] w-full max-w-xl flex-col items-center justify-center rounded-2xl px-5 text-center text-zinc-100">
 
-        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-blue-300/20 bg-blue-400/10 text-blue-200">
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-blue-300/30 bg-blue-400/15 text-blue-200">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -24,11 +24,11 @@ export default function NoProject() {
           </svg>
         </div>
 
-        <h2 className="text-lg font-semibold text-white">
+        <h2 className="text-xl font-semibold text-white">
           No projects yet
         </h2>
 
-        <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-400">
+        <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-300">
           You have not created any reminder yet.
           Your projects will appear here once you create one.
         </p>

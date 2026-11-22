@@ -27,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${bodoniModa.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex px-1.5 md:px-3 min-h-full flex-col">
         <ContextFile>{children}</ContextFile>
       </body>
     </html>
