@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-
+import CreateProject from "@/component/project/CreateProject";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
 import Loading from "@/component/Loading";
 
-import AddPage from "./AddProject";
 
 async function ProjectContent() {
   const supabase = await createSupabaseServerClient();
@@ -18,7 +17,7 @@ async function ProjectContent() {
     redirect("/register");
   }
 
-  return <AddPage />;
+  return <CreateProject />;
 }
 
 export default function ProjectPage() {
