@@ -114,7 +114,7 @@ export default function CreateProject() {
         <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-sky-500/[0.1] blur-[140px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-2">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-4">
         <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
           <div className="relative flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-6 lg:w-1/2 lg:px-10 lg:py-5">
             <div className="mx-auto mb-3 w-full max-w-xl ">

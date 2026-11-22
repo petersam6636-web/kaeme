@@ -150,7 +150,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="register-page w-full min-h-[100svh] ">
+    <main className="register-page p-2 w-full min-h-[100svh] ">
       <div className="register-shell">
         <section className="register-brand">
           <div className="register-illustration-frame">

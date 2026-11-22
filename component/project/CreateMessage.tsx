@@ -9,8 +9,10 @@ import {
   ArrowLeft,
   ArrowRight,
   Bell,
+  CalendarDays,
   CalendarClock,
   CheckCircle2,
+  ChevronDown,
   Clock3,
   MessageSquare,
   Phone,
@@ -33,6 +35,16 @@ interface ReminderDetails {
   message: string;
 }
 
+const WEEKDAYS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
 export default function CreateMessage({
   project,
   onBack,
@@ -45,6 +57,8 @@ export default function CreateMessage({
     message: "",
   });
 
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [daysOpen, setDaysOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -56,6 +70,7 @@ export default function CreateMessage({
   const orb3 = useRef<HTMLDivElement>(null);
   const centerIcon = useRef<HTMLDivElement>(null);
   const saving = useRef(false);
+  const savedProjectId = useRef<string | null>(null);
 
   // Animated scene
   useEffect(() => {
@@ -115,6 +130,14 @@ export default function CreateMessage({
     }));
   }
 
+  function toggleDay(day: string) {
+    setSelectedDays((previous) =>
+      previous.includes(day)
+        ? previous.filter((selectedDay) => selectedDay !== day)
+        : [...previous, day]
+    );
+  }
+
   function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
@@ -157,12 +180,33 @@ export default function CreateMessage({
         message: reminder.message.trim(),
       };
 
-      const { error: insertError } = await supabase
-        .from("projects")
-        .insert(newProject);
+      if (!savedProjectId.current) {
+        const { data: createdProject, error: insertError } = await supabase
+          .from("projects")
+          .insert(newProject)
+          .select("id")
+          .single();
 
-      if (insertError) {
-        throw insertError;
+        if (insertError) {
+          throw insertError;
+        }
+
+        savedProjectId.current = createdProject.id;
+      }
+
+      if (selectedDays.length > 0) {
+        const { error: daysError } = await supabase.from("days").insert(
+          selectedDays.map((day) => ({
+            project_id: savedProjectId.current,
+            day,
+          }))
+        );
+
+        if (daysError) {
+          throw new Error(
+            `Your project was saved, but its selected days could not be saved: ${daysError.message}`
+          );
+        }
       }
 
       setShowConfirmation(false);
@@ -195,7 +239,7 @@ export default function CreateMessage({
         <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-2">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-4">
 
         <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
 
@@ -245,8 +289,8 @@ export default function CreateMessage({
               </h1>
 
               <p className="mt-2 max-w-sm text-xs leading-5 text-zinc-400 sm:text-sm">
-                Configure the time, phone number and message
-                for your new reminder.
+                Add the phone number, message, reminder time, and any days you
+                want it to repeat.
               </p>
             </div>
 
@@ -257,33 +301,12 @@ export default function CreateMessage({
               className="mx-auto flex w-full max-w-xl flex-col gap-3"
             >
 
-              {/* Time */}
-              <div>
-                <label className="mb-2 block text-xs font-semibold text-zinc-300">
-                  Reminder time
-                </label>
-
-                <div className="group relative">
-                  <Clock3
-                    size={17}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
-                  />
-
-                  <input
-                    type="time"
-                    value={reminder.time}
-                    onChange={(e) =>
-                      updateReminder("time", e.target.value)
-                    }
-                    required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
-                  />
-                </div>
-              </div>
-
               {/* Phone */}
               <div>
-                <label className="mb-2 block text-xs font-semibold text-zinc-300">
+                <label
+                  htmlFor="reminder-phone"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
                   Phone number
                 </label>
 
@@ -294,6 +317,7 @@ export default function CreateMessage({
                   />
 
                   <input
+                    id="reminder-phone"
                     type="tel"
                     value={reminder.phone}
                     onChange={(e) =>
@@ -309,8 +333,11 @@ export default function CreateMessage({
 
               {/* Message */}
               <div>
-                <label className="mb-2 block text-xs font-semibold text-zinc-300">
-                  Reminder message
+                <label
+                  htmlFor="reminder-message"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
+                  Chat message
                 </label>
 
                 <div className="relative">
@@ -320,17 +347,125 @@ export default function CreateMessage({
                   />
 
                   <textarea
+                    id="reminder-message"
                     value={reminder.message}
                     onChange={(e) =>
                       updateReminder("message", e.target.value)
                     }
                     placeholder="What would you like to be reminded about?"
-                    rows={2}
+                    rows={4}
                     maxLength={1000}
                     required
-                    className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm leading-5 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="min-h-28 w-full resize-y rounded-xl border border-white/[0.09] bg-white/[0.035] py-3 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
+              </div>
+
+              {/* Reminder time */}
+              <div>
+                <label
+                  htmlFor="reminder-time"
+                  className="mb-2 block text-xs font-semibold text-zinc-300"
+                >
+                  Reminder time
+                </label>
+
+                <div className="group relative">
+                  <Clock3
+                    size={17}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-blue-400"
+                  />
+
+                  <input
+                    id="reminder-time"
+                    type="time"
+                    value={reminder.time}
+                    onChange={(e) =>
+                      updateReminder("time", e.target.value)
+                    }
+                    required
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                  />
+                </div>
+              </div>
+
+              {/* Custom days */}
+              <div className="relative">
+                <span className="mb-2 block text-xs font-semibold text-zinc-300">
+                  Custom days
+                </span>
+                <button
+                  type="button"
+                  aria-expanded={daysOpen}
+                  aria-controls="custom-days-options"
+                  onClick={() => setDaysOpen((open) => !open)}
+                  className="flex w-full items-center justify-between rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3 text-left text-sm outline-none transition-all hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                >
+                  <span className="flex min-w-0 items-center gap-3">
+                    <CalendarDays
+                      size={17}
+                      className="shrink-0 text-blue-300"
+                    />
+                    <span
+                      className={
+                        selectedDays.length > 0
+                          ? "truncate text-white"
+                          : "truncate text-zinc-500"
+                      }
+                    >
+                      {selectedDays.length > 0
+                        ? selectedDays.join(", ")
+                        : "Choose days (optional)"}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    size={17}
+                    className={`shrink-0 text-zinc-500 transition-transform ${daysOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {daysOpen && (
+                  <div
+                    id="custom-days-options"
+                    className="absolute inset-x-0 top-full z-30 mt-2 rounded-2xl border border-white/10 bg-[#111827] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.55)]"
+                  >
+                    <div className="mb-2 flex items-center justify-between px-1">
+                      <p className="text-xs font-semibold text-zinc-200">
+                        Repeat on
+                      </p>
+                      <span className="text-[10px] text-zinc-500">
+                        Select any days
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+                      {WEEKDAYS.map((day) => {
+                        const checked = selectedDays.includes(day);
+
+                        return (
+                          <label
+                            key={day}
+                            className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-medium transition-colors ${
+                              checked
+                                ? "border-blue-400/30 bg-blue-400/10 text-blue-200"
+                                : "border-transparent text-zinc-300 hover:bg-white/[0.05]"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => toggleDay(day)}
+                              className="h-4 w-4 accent-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
+                            />
+                            {day}
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <p className="mt-2 px-1 text-[10px] leading-4 text-zinc-500">
+                      Leave all days unchecked for a one-time reminder.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {error && (
@@ -475,38 +610,6 @@ export default function CreateMessage({
               Review these details before saving your project and reminder.
             </p>
 
-            <dl className="mt-5 space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.035] p-4 text-sm">
-              <div>
-                <dt className="text-xs text-zinc-500">Project</dt>
-                <dd className="mt-1 break-words font-medium text-white">
-                  {project.name}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs text-zinc-500">Description</dt>
-                <dd className="mt-1 whitespace-pre-wrap break-words text-zinc-300">
-                  {project.description}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs text-zinc-500">Reminder time</dt>
-                <dd className="mt-1 font-medium text-white">
-                  {reminder.time}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs text-zinc-500">Phone number</dt>
-                <dd className="mt-1 break-words font-medium text-white">
-                  {reminder.phone}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs text-zinc-500">Message</dt>
-                <dd className="mt-1 whitespace-pre-wrap break-words text-zinc-300">
-                  {reminder.message}
-                </dd>
-              </div>
-            </dl>
 
             {error && (
               <p role="alert" className="mt-4 text-sm text-red-400">
@@ -517,14 +620,14 @@ export default function CreateMessage({
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
               <button
                 type="button"
-                disabled={loading}
+                disabled={loading || Boolean(savedProjectId.current)}
                 onClick={() => {
                   setShowConfirmation(false);
                   setError("");
                 }}
                 className="flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:bg-white/[0.09] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Review details
+                {savedProjectId.current ? "Project saved" : "Review details"}
               </button>
               <button
                 type="button"
@@ -532,7 +635,11 @@ export default function CreateMessage({
                 onClick={confirmCreate}
                 className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {loading ? "Saving..." : "Confirm and save"}
+                {loading
+                  ? "Saving..."
+                  : savedProjectId.current
+                    ? "Retry day save"
+                    : "Confirm and save"}
                 {!loading && <Check size={16} />}
               </button>
             </div>
@@ -560,7 +667,7 @@ export default function CreateMessage({
 
             <button
               type="button"
-              onClick={() => router.push("/home")}
+              onClick={() => router.push("/")}
               className="mt-7 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white transition-all hover:bg-blue-500"
             >
               Go to dashboard

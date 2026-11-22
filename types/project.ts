@@ -26,9 +26,8 @@ export type ProjectInsert = {
   schedule_time: string;
   phone_number: string;
   message: string;
-  status?: ProjectStatus;
   created_at?: string;
-  sent_at?: string | null;
+  last_sent_at?: string | null;
 };
 
 export type ProjectUpdate = Partial<
