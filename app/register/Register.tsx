@@ -62,11 +62,6 @@ export default function RegisterPage() {
     }
 
     if (isRegister) {
-      if (!name.trim() || !username.trim()) {
-        setError("Please complete all your registration details.");
-        return;
-      }
-
       if (password.length < 8) {
         setError("Your password must contain at least 8 characters.");
         return;
@@ -82,10 +77,6 @@ export default function RegisterPage() {
             email: cleanEmail,
             password,
             options: {
-              data: {
-                full_name: name.trim(),
-                username: username.trim(),
-              },
               emailRedirectTo: `${window.location.origin}/auth/callback`,
             },
           });
@@ -154,14 +145,16 @@ export default function RegisterPage() {
     <main className="register-page w-full min-h-[100svh] px-4 py-6 md:px-6">
       <div className="register-shell">
         <section className="register-brand">
-          <Image
-            src="/loginImage.png"
-            alt="A person signing in to their account"
-            width={512}
-            height={512}
-            priority
-            className="register-illustration"
-          />
+          <div className="register-illustration-frame">
+            <Image
+              src="/3d-user-login.avif"
+              alt="A 3D illustration of a user signing in"
+              fill
+              sizes="(min-width: 851px) 40vw, 0px"
+              priority
+              className="register-illustration"
+            />
+          </div>
         </section>
 
         <section className="register-form-panel">

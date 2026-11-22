@@ -124,13 +124,20 @@ select:-webkit-autofill:focus {
   min-width: 0;
 }
 
+.register-illustration-frame {
+  position: relative;
+  width: min(100%, 480px, 68svh);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 50%;
+  background: #050816;
+  box-shadow: 0 28px 72px rgb(0 0 0 / 42%);
+}
+
 .register-illustration {
-  display: block;
-  width: min(100%, 520px);
-  max-height: min(68svh, 560px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 28px 56px rgb(0 0 0 / 35%));
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .register-form-panel {
