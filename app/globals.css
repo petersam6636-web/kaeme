@@ -8,8 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sanita);
+  --font-mono: var(--font-sanita);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,7 +22,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sanita), sans-serif;
 }
 
 input,
@@ -45,4 +45,41 @@ select:-webkit-autofill:focus {
   -webkit-text-fill-color: #fff;
   -webkit-box-shadow: 0 0 0 1000px #000 inset;
   transition: background-color 9999s ease-in-out 0s;
+}
+
+
+@keyframes left-dot {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(12px);
+  }
+}
+
+@keyframes right-dot {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-12px);
+  }
+}
+
+.loading-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.loading-dot-left {
+  left: 12px;
+  animation: left-dot 1.2s ease-in-out infinite;
+}
+
+.loading-dot-right {
+  right: 12px;
+  animation: right-dot 1.2s ease-in-out infinite;
 }
