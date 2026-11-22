@@ -45,7 +45,6 @@ export default function RegisterPage() {
     gsap.from('.register-page', {
         scale: 0,
         opacity: 0,
-        rotation: 95,
         duration: 0.13
     })
   }, {dependencies: [mode]})
@@ -151,7 +150,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="register-page w-full min-h-[100svh] px-4 py-6 md:px-6">
+    <main className="register-page w-full min-h-[100svh] ">
       <div className="register-shell">
         <section className="register-brand">
           <div className="register-illustration-frame">
