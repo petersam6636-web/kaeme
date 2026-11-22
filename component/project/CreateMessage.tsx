@@ -20,6 +20,7 @@ import {
 
 import { supabase } from "@/lib/supabase-client";
 import type { ProjectDetails } from "./CreateProject";
+import type { ProjectInsert } from "@/types/project";
 
 interface CreateMessageProps {
   project: ProjectDetails;
@@ -47,12 +48,14 @@ export default function CreateMessage({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const scene = useRef<HTMLDivElement>(null);
   const orb1 = useRef<HTMLDivElement>(null);
   const orb2 = useRef<HTMLDivElement>(null);
   const orb3 = useRef<HTMLDivElement>(null);
   const centerIcon = useRef<HTMLDivElement>(null);
+  const saving = useRef(false);
 
   // Animated scene
   useEffect(() => {
@@ -112,8 +115,7 @@ export default function CreateMessage({
     }));
   }
 
-  // Combine both stages and save the project
-  async function handleCreate(e: FormEvent<HTMLFormElement>) {
+  function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
 
@@ -126,6 +128,14 @@ export default function CreateMessage({
       return;
     }
 
+    setShowConfirmation(true);
+  }
+
+  async function confirmCreate() {
+    if (saving.current) return;
+
+    saving.current = true;
+    setError("");
     setLoading(true);
 
     try {
@@ -138,35 +148,46 @@ export default function CreateMessage({
         throw new Error("Please sign in to create your reminder.");
       }
 
+      const newProject: ProjectInsert = {
+        user_id: user.id,
+        name: project.name.trim(),
+        description: project.description.trim(),
+        schedule_time: reminder.time,
+        phone_number: reminder.phone.trim(),
+        message: reminder.message.trim(),
+      };
+
       const { error: insertError } = await supabase
         .from("projects")
-        .insert({
-          user_id: user.id,
-          name: project.name.trim(),
-          description: project.description.trim(),
-          schedule_time: reminder.time,
-          phone_number: reminder.phone.trim(),
-          message: reminder.message.trim(),
-        });
+        .insert(newProject);
 
       if (insertError) {
         throw insertError;
       }
 
+      setShowConfirmation(false);
       setSuccess(true);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Unable to create your reminder. Please try again."
-      );
+      if (err instanceof Error) {
+        setError(err.message);
+      } else if (
+        typeof err === "object" &&
+        err !== null &&
+        "message" in err &&
+        typeof err.message === "string"
+      ) {
+        setError(err.message);
+      } else {
+        setError("Unable to create your reminder. Please try again.");
+      }
     } finally {
+      saving.current = false;
       setLoading(false);
     }
   }
 
   return (
-    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
+    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
 
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
@@ -174,16 +195,16 @@ export default function CreateMessage({
         <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
-      <section className="relative z-10 flex min-h-[100dvh] w-full items-stretch justify-center lg:min-h-0 lg:px-5 lg:py-5">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center lg:px-5 lg:py-5">
 
-        <div className="flex min-h-[100dvh] w-full max-w-7xl flex-col overflow-hidden border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:min-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:border">
+        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-7xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
 
           {/* LEFT: REMINDER FORM */}
-          <div className="flex w-full flex-1 flex-col justify-center px-6 py-10 sm:px-10 lg:w-1/2 lg:px-14">
+          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:w-1/2 lg:px-10 lg:py-4">
 
-            <div className="mb-8">
+            <div className="mx-auto mb-4 w-full max-w-xl sm:mb-5">
 
-              <div className="mb-8 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between sm:mb-5">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
                     <Bell size={19} />
@@ -204,7 +225,7 @@ export default function CreateMessage({
                 </button>
               </div>
 
-              <div className="mb-4 flex items-center gap-2">
+              <div className="mb-3 flex items-center gap-2">
                 <span className="rounded-full border border-blue-400/20 bg-blue-400/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-blue-300">
                   Step 02 / 02
                 </span>
@@ -219,19 +240,19 @@ export default function CreateMessage({
                 <div className="h-1 flex-1 rounded-full bg-blue-400" />
               </div>
 
-              <h1 className="mt-7 text-3xl font-bold tracking-tight sm:text-4xl">
+              <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
                 Set your reminder.
               </h1>
 
-              <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
+              <p className="mt-2 max-w-sm text-xs leading-5 text-zinc-400 sm:text-sm">
                 Configure the time, phone number and message
                 for your new reminder.
               </p>
             </div>
 
             {/* Project preview */}
-            <div className="mb-6 flex items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
+            <div className="mx-auto mb-3 flex w-full max-w-xl items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-2.5 sm:mb-4">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
                 <CheckCircle2 size={19} />
               </div>
 
@@ -247,7 +268,10 @@ export default function CreateMessage({
               <Check size={16} className="ml-auto shrink-0 text-blue-400" />
             </div>
 
-            <form onSubmit={handleCreate} className="flex flex-col gap-5">
+            <form
+              onSubmit={handleCreate}
+              className="mx-auto flex w-full max-w-xl flex-col gap-3"
+            >
 
               {/* Time */}
               <div>
@@ -268,7 +292,7 @@ export default function CreateMessage({
                       updateReminder("time", e.target.value)
                     }
                     required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 [color-scheme:dark] hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -294,7 +318,7 @@ export default function CreateMessage({
                     placeholder="+233 XX XXX XXXX"
                     maxLength={20}
                     required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-4 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -317,10 +341,10 @@ export default function CreateMessage({
                       updateReminder("message", e.target.value)
                     }
                     placeholder="What would you like to be reminded about?"
-                    rows={3}
+                    rows={2}
                     maxLength={1000}
                     required
-                    className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] py-3.5 pl-11 pr-4 text-sm leading-6 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] py-2.5 pl-11 pr-4 text-sm leading-5 text-white outline-none transition-all duration-300 placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -332,7 +356,7 @@ export default function CreateMessage({
               <button
                 type="submit"
                 disabled={loading}
-                className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-4 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-1 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
+                className="group flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? "Creating reminder..." : "Create reminder"}
 
@@ -345,7 +369,7 @@ export default function CreateMessage({
               </button>
             </form>
 
-            <p className="mt-8 text-center text-[10px] tracking-[0.18em] text-zinc-600">
+            <p className="mx-auto mt-3 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-4">
               ONE MORE STEP TO A MORE ORGANIZED YOU.
             </p>
           </div>
@@ -359,7 +383,7 @@ export default function CreateMessage({
               <div className="absolute left-1/2 top-1/2 h-[450px] w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.12] blur-[110px]" />
             </div>
 
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(110,231,183,0.35)_1px,transparent_1px)] bg-[size:25px_25px] opacity-[0.17]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(147,197,253,0.35)_1px,transparent_1px)] bg-[size:25px_25px] opacity-[0.17]" />
 
             <div
               ref={orb1}
@@ -440,6 +464,97 @@ export default function CreateMessage({
           </div>
         </div>
       </section>
+
+      {showConfirmation && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="confirm-reminder-title"
+            aria-describedby="confirm-reminder-description"
+            className="max-h-full w-full max-w-md overflow-y-auto rounded-3xl border border-blue-400/20 bg-[#0b1020] p-6 shadow-[0_20px_100px_rgba(0,0,0,0.6)] sm:p-8"
+          >
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
+              <CheckCircle2 size={24} />
+            </div>
+
+            <h2
+              id="confirm-reminder-title"
+              className="text-xl font-bold text-white"
+            >
+              Confirm your reminder
+            </h2>
+            <p
+              id="confirm-reminder-description"
+              className="mt-3 text-sm leading-6 text-zinc-400"
+            >
+              Review these details before saving your project and reminder.
+            </p>
+
+            <dl className="mt-5 space-y-3 rounded-xl border border-white/[0.08] bg-white/[0.035] p-4 text-sm">
+              <div>
+                <dt className="text-xs text-zinc-500">Project</dt>
+                <dd className="mt-1 break-words font-medium text-white">
+                  {project.name}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-zinc-500">Description</dt>
+                <dd className="mt-1 whitespace-pre-wrap break-words text-zinc-300">
+                  {project.description}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-zinc-500">Reminder time</dt>
+                <dd className="mt-1 font-medium text-white">
+                  {reminder.time}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-zinc-500">Phone number</dt>
+                <dd className="mt-1 break-words font-medium text-white">
+                  {reminder.phone}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-zinc-500">Message</dt>
+                <dd className="mt-1 whitespace-pre-wrap break-words text-zinc-300">
+                  {reminder.message}
+                </dd>
+              </div>
+            </dl>
+
+            {error && (
+              <p role="alert" className="mt-4 text-sm text-red-400">
+                {error}
+              </p>
+            )}
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+              <button
+                type="button"
+                disabled={loading}
+                onClick={() => {
+                  setShowConfirmation(false);
+                  setError("");
+                }}
+                className="flex flex-1 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:bg-white/[0.09] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Review details
+              </button>
+              <button
+                type="button"
+                disabled={loading}
+                onClick={confirmCreate}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {loading ? "Saving..." : "Confirm and save"}
+                {!loading && <Check size={16} />}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SUCCESS */}
       {success && (

@@ -223,7 +223,7 @@ export default function CreateProject() {
               </button>
             </form>
 
-            <p className="mx-auto mt-4 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-5">
+            <p className="mx-auto mt-2.5 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-5">
               YOUR TIME MATTERS. LET EASEWAY HELP YOU REMEMBER.
             </p>
           </div>
