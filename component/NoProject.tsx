@@ -9,11 +9,9 @@ import { supabase } from "@/lib/supabase-client";
 export default function NoProject() {
   const router = useRouter();
   const [checkingAuth, setCheckingAuth] = useState(false);
-  const [authError, setAuthError] = useState("");
 
   async function handleCreateReminder() {
     setCheckingAuth(true);
-    setAuthError("");
 
     try {
       const {
@@ -21,18 +19,14 @@ export default function NoProject() {
         error,
       } = await supabase.auth.getUser();
 
-      if (error) {
-        setAuthError("Unable to verify your sign-in. Please try again.");
+      if (error || !user) {
+        router.push("/register");
         return;
       }
 
-      router.push(user ? "/project" : "/register");
-    } catch (error) {
-      setAuthError(
-        error instanceof Error
-          ? error.message
-          : "Unable to verify your sign-in. Please try again."
-      );
+      router.push("/project");
+    } catch {
+      router.push("/register");
     } finally {
       setCheckingAuth(false);
     }
@@ -69,12 +63,6 @@ export default function NoProject() {
           Your projects will appear here once you create one.
         </p>
 
-        {authError && (
-          <p className="mt-4 text-sm text-red-300" role="alert">
-            {authError}
-          </p>
-        )}
-
         <button
           type="button"
           onClick={handleCreateReminder}
@@ -82,7 +70,7 @@ export default function NoProject() {
           aria-busy={checkingAuth}
           className="mt-6 inline-flex cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
         >
-          {checkingAuth ? "Checking..." : "Create reminder"}
+          {checkingAuth ? "verifying..." : "Create Reminder"}
         </button>
       </div>
     </section>

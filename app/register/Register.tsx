@@ -33,11 +33,20 @@ export default function RegisterPage() {
       setError("Sign in could not be completed. Please try again.");
     }
   }, []);
+
+  useEffect(() => {
+    if (!success) return;
+
+    const timeoutId = window.setTimeout(() => setSuccess(""), 2000);
+    return () => window.clearTimeout(timeoutId);
+  }, [success]);
+
   useGSAP(() => {
     gsap.from('.register-page', {
         scale: 0,
         opacity: 0,
-        duration: 0.2
+        rotation: 95,
+        duration: 0.13
     })
   }, {dependencies: [mode]})
   
@@ -258,12 +267,6 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              {success && (
-                <div className="auth-feedback auth-success" role="status">
-                  {success}
-                </div>
-              )}
-
               {/* SUBMIT */}
 
               <button
@@ -364,6 +367,16 @@ export default function RegisterPage() {
 
       </div>
 
+      {success && (
+        <div
+          className="auth-toast auth-toast-success"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {success}
+        </div>
+      )}
     </main>
   );
 }
