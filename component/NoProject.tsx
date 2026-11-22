@@ -1,35 +1,19 @@
 
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { supabase } from "@/lib/supabase-client";
+interface NoProjectProps {
+  isAuthenticated: boolean;
+}
 
-export default function NoProject() {
+export default function NoProject({
+  isAuthenticated,
+}: NoProjectProps) {
   const router = useRouter();
-  const [checkingAuth, setCheckingAuth] = useState(false);
 
-  async function handleCreateReminder() {
-    setCheckingAuth(true);
-
-    try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (error || !user) {
-        router.push("/register");
-        return;
-      }
-
-      router.push("/project");
-    } catch {
-      router.push("/register");
-    } finally {
-      setCheckingAuth(false);
-    }
+  function handleCreateReminder() {
+    router.push(isAuthenticated ? "/project" : "/register");
   }
 
   return (
@@ -66,11 +50,9 @@ export default function NoProject() {
         <button
           type="button"
           onClick={handleCreateReminder}
-          disabled={checkingAuth}
-          aria-busy={checkingAuth}
           className="mt-6 inline-flex cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-200 hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
         >
-          {checkingAuth ? "verifying..." : "Create Reminder"}
+          Create Reminder
         </button>
       </div>
     </section>

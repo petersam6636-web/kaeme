@@ -109,6 +109,7 @@ select:-webkit-autofill:focus {
 
 .register-shell {
   display: grid;
+  grid-template-areas: "form image";
   grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
   align-items: center;
   gap: clamp(2rem, 6vw, 5rem);
@@ -118,7 +119,7 @@ select:-webkit-autofill:focus {
 }
 
 .register-brand {
-  grid-column: 2;
+  grid-area: image;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,7 +175,7 @@ select:-webkit-autofill:focus {
 }
 
 .register-form-panel {
-  grid-column: 1;
+  grid-area: form;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -533,6 +534,7 @@ select:-webkit-autofill:focus {
 
 @media (max-width: 850px) {
   .register-shell {
+    grid-template-areas: "form";
     grid-template-columns: minmax(0, 440px);
     max-width: 440px;
     gap: 0;
@@ -542,9 +544,6 @@ select:-webkit-autofill:focus {
     display: none;
   }
 
-  .register-form-panel {
-    grid-column: 1;
-  }
 }
 
 @media (max-width: 640px) {

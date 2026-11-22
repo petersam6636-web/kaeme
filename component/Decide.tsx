@@ -6,11 +6,15 @@ import ProjectExist from "./ProjectExist";
 
 interface DecideProps {
   projects: Project[];
+  isAuthenticated: boolean;
 }
 
-export default function Decide({ projects }: DecideProps) {
+export default function Decide({
+  projects,
+  isAuthenticated,
+}: DecideProps) {
   if (projects.length === 0) {
-    return <NoProject />;
+    return <NoProject isAuthenticated={isAuthenticated} />;
   }
 
   return <ProjectExist projects={projects} />;

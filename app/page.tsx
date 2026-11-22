@@ -16,7 +16,7 @@ async function HomeContent() {
   } = await supabase.auth.getUser();
 
   if (authError || !user) {
-    return <Decide projects={[]} />;
+    return <Decide projects={[]} isAuthenticated={false} />;
   }
 
   // Retrieve projects belonging to this user
@@ -30,10 +30,10 @@ async function HomeContent() {
     .order("created_at", { ascending: false });
 
   if (projectsError) {
-    return <Decide projects={[]} />;
+    return <Decide projects={[]} isAuthenticated />;
   }
 
-  return <Decide projects={projects ?? []} />;
+  return <Decide projects={projects ?? []} isAuthenticated />;
 }
 
 export default function HomePage() {
