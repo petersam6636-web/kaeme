@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bodoni_Moda, Geist_Mono } from "next/font/google";
 import ContextFile from "@/lib/ContextFile";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni-moda",
   subsets: ["latin"],
 });
 
@@ -25,9 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${bodoniModa.variable} ${geistMono.variable} bg-black h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex bg-black min-h-full flex-col">
         <ContextFile>{children}</ContextFile>
       </body>
     </html>

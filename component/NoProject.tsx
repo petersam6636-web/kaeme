@@ -27,7 +27,7 @@ export default function NoProject() {
         </h2>
 
         <p className="mt-2 max-w-sm text-sm leading-6 text-black/55 dark:text-white/55">
-          You have not created any projects yet.
+          You have not created any reminder yet.
           Your projects will appear here once you create one.
         </p>
 
