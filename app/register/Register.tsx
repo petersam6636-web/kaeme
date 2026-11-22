@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useState, type FormEvent } from "react";
+import Image from "next/image";
+import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-client";
 
@@ -23,6 +24,15 @@ export default function RegisterPage() {
   const [success, setSuccess] = useState("");
 
   const isRegister = mode === "register";
+
+  useEffect(() => {
+    if (
+      new URLSearchParams(window.location.search).get("error") ===
+      "auth-callback"
+    ) {
+      setError("Sign in could not be completed. Please try again.");
+    }
+  }, []);
 
   function changeMode(nextMode: AuthMode) {
     setMode(nextMode);
@@ -69,7 +79,7 @@ export default function RegisterPage() {
                 full_name: name.trim(),
                 username: username.trim(),
               },
-              emailRedirectTo: `${window.location.origin}/auth/callback?next=/`,
+              emailRedirectTo: `${window.location.origin}/auth/callback`,
             },
           });
 
@@ -118,7 +128,7 @@ export default function RegisterPage() {
         await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: `${window.location.origin}/auth/callback?next=/`,
+            redirectTo: `${window.location.origin}/auth/callback`,
           },
         });
 
@@ -134,105 +144,20 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="register-page w-full min-h-screen px-1.5 py-4 md:px-3 md:py-6">
-
+    <main className="register-page w-full min-h-[100svh] px-4 py-6 md:px-6">
       <div className="register-shell">
-
-        {/* LEFT BRANDING SECTION */}
-
         <section className="register-brand">
-
-          <div className="brand-content">
-
-            <div className="brand-symbol">
-              <svg
-                viewBox="0 0 64 64"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-14 w-14"
-              >
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="21"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <ellipse
-                  cx="32"
-                  cy="32"
-                  rx="11"
-                  ry="29"
-                  transform="rotate(45 32 32)"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <ellipse
-                  cx="32"
-                  cy="32"
-                  rx="11"
-                  ry="29"
-                  transform="rotate(-45 32 32)"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <circle cx="32" cy="32" r="4" fill="currentColor" />
-              </svg>
-            </div>
-
-            <h1 className="brand-title">
-              Oi Kaeme<span>.</span>
-            </h1>
-
-            <p className="brand-description">
-              Make every moment count.
-              <br />
-              Stay organized. Never miss what matters.
-            </p>
-
-            <div className="brand-divider" />
-
-            <p className="brand-caption">
-              A smarter way to manage your reminders,
-              <br className="hidden sm:block" />
-              your time, and everything that matters.
-            </p>
-
-            <div className="brand-footer">
-              <span className="brand-footer-dot" />
-              Your time. Your priorities. Your way.
-            </div>
-
-          </div>
-
+          <Image
+            src="/loginImage.png"
+            alt="A person signing in to their account"
+            width={512}
+            height={512}
+            priority
+            className="register-illustration"
+          />
         </section>
 
-        {/* RIGHT AUTHENTICATION SECTION */}
-
         <section className="register-form-panel">
-
-          <svg
-            className="register-panel-shape"
-            viewBox="0 0 800 700"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <path
-              d="
-                M 0 0
-                H 800
-                V 610
-                C 690 680 605 575 480 585
-                C 350 595 280 720 180 620
-                C 70 500 115 410 205 300
-                C 290 190 190 65 0 0
-                Z
-              "
-              fill="#0b1018"
-              fillOpacity="0.97"
-            />
-          </svg>
-
           <div className="register-form-content">
 
             {/* HEADER */}
@@ -268,7 +193,7 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit} className="auth-form">
 
               {isRegister && (
-                <>
+                <div className="registration-fields">
                   <div className="form-field">
                     <label htmlFor="name">Full name</label>
                     <input
@@ -294,7 +219,7 @@ export default function RegisterPage() {
                       required
                     />
                   </div>
-                </>
+                </div>
               )}
 
               <div className="form-field">

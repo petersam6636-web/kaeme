@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: dark;
-  --background: #070b09;
+  --background: #050816;
   --foreground: #f4f4f5;
 }
 
@@ -17,9 +17,9 @@ body {
   min-height: 100vh;
   background: var(--background);
   background-image:
-    radial-gradient(ellipse 75% 55% at 8% 0%, rgb(37 99 235 / 34%), transparent 68%),
-    radial-gradient(ellipse 55% 45% at 100% 24%, rgb(8 145 178 / 24%), transparent 68%),
-    radial-gradient(ellipse 60% 55% at 50% 100%, rgb(30 41 59 / 48%), transparent 72%);
+    radial-gradient(ellipse 60% 75% at 12% 50%, rgb(37 99 235 / 42%), transparent 70%),
+    radial-gradient(ellipse 48% 55% at 92% 10%, rgb(14 165 233 / 28%), transparent 68%),
+    radial-gradient(ellipse 55% 52% at 80% 100%, rgb(79 70 229 / 28%), transparent 70%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-bodoni-moda), serif;
@@ -103,130 +103,51 @@ select:-webkit-autofill:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #050816;
-  background-image:
-    radial-gradient(ellipse 60% 75% at 12% 50%, rgb(37 99 235 / 42%), transparent 70%),
-    radial-gradient(ellipse 48% 55% at 92% 10%, rgb(14 165 233 / 28%), transparent 68%),
-    radial-gradient(ellipse 55% 52% at 80% 100%, rgb(79 70 229 / 28%), transparent 70%);
+  background: transparent;
   color: #f4f4f5;
 }
 
 .register-shell {
-  position: relative;
   display: grid;
-  grid-template-columns: 0.88fr 1.12fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
   width: 100%;
-  max-width: 1180px;
-  min-height: 650px;
-  overflow: hidden;
-  isolation: isolate;
+  max-width: 1080px;
+  margin: auto;
 }
-
-/* =========================================
-   BRANDING
-========================================= */
 
 .register-brand {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 30px;
-  color: white;
-}
-
-.brand-content {
-  display: flex;
-  width: 100%;
-  max-width: 380px;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.brand-symbol {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 76px;
-  height: 76px;
-  margin-bottom: 18px;
-  color: white;
-}
-
-.brand-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -2px;
-}
-
-.brand-title span {
-  color: #55c5ff;
-}
-
-.brand-description {
-  margin-top: 24px;
-  font-size: 16px;
-  line-height: 1.8;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.brand-divider {
-  width: 48px;
-  height: 3px;
-  margin: 28px 0 20px;
-  border-radius: 20px;
-  background: #55c5ff;
-}
-
-.brand-caption {
-  font-size: 13px;
-  line-height: 1.9;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.brand-footer {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-top: 50px;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.brand-footer-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #55c5ff;
-  box-shadow: 0 0 12px #55c5ff;
-}
-
-/* =========================================
-   FORM PANEL
-========================================= */
-
-.register-form-panel {
-  position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 36px 36px 42px 44px;
-  color: #f4f4f5;
 }
 
-.register-panel-shape {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  filter: drop-shadow(-2px 2px 3px rgba(0, 0, 0, 0.13));
+.register-illustration {
+  display: block;
+  width: min(100%, 520px);
+  max-height: min(68svh, 560px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 28px 56px rgb(0 0 0 / 35%));
+}
+
+.register-form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 24px;
+  background: rgb(11 16 24 / 94%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 6%),
+    0 28px 72px rgb(0 0 0 / 42%);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  color: #f4f4f5;
 }
 
 .register-form-content {
@@ -337,6 +258,12 @@ select:-webkit-autofill:focus {
 .auth-form {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+
+.registration-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -536,84 +463,23 @@ select:-webkit-autofill:focus {
 
 @media (max-width: 850px) {
   .register-shell {
-    grid-template-columns: 0.8fr 1.2fr;
-    min-height: 650px;
+    grid-template-columns: minmax(0, 440px);
+    max-width: 440px;
+    gap: 0;
   }
 
-  .register-form-panel {
-    padding: 28px 24px;
-  }
-
-  .brand-description {
-    font-size: 14px;
+  .register-brand {
+    display: none;
   }
 }
 
 @media (max-width: 640px) {
-  .register-page {
-    align-items: flex-start;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
   .register-shell {
-    display: flex;
-    flex-direction: column;
-    min-height: auto;
-    max-width: 480px;
-    overflow: visible;
-    gap: 25px;
-  }
-
-  .register-brand {
-    padding: 20px 15px 5px;
-  }
-
-  .brand-symbol {
-    width: 52px;
-    height: 52px;
-    margin-bottom: 10px;
-  }
-
-  .brand-symbol svg {
-    width: 43px;
-    height: 43px;
-  }
-
-  .brand-title {
-    font-size: 2rem;
-  }
-
-  .brand-description {
-    margin-top: 12px;
-    font-size: 12px;
-    line-height: 1.6;
-  }
-
-  .brand-divider,
-  .brand-caption,
-  .brand-footer {
-    display: none;
+    max-width: 440px;
   }
 
   .register-form-panel {
-    min-height: auto;
-    padding: 30px 20px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 25px;
-    background: rgba(11, 16, 24, 0.97);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.38);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .register-panel-shape {
-    display: none;
-  }
-
-  .register-form-content {
-    padding: 0;
+    padding: 24px 18px;
   }
 
   .form-heading h2 {
@@ -621,7 +487,7 @@ select:-webkit-autofill:focus {
   }
 
   .auth-form {
-    gap: 14px;
+    gap: 12px;
   }
 
   .form-field input {
@@ -632,6 +498,10 @@ select:-webkit-autofill:focus {
 @media (max-width: 380px) {
   .register-form-panel {
     padding: 25px 15px;
+  }
+
+  .registration-fields {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .form-heading h2 {
