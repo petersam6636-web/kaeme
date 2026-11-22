@@ -31,6 +31,7 @@ type ReminderDetails = {
   schedule_time: string;
   phone_number: string;
   message: string;
+  last_sent_at: string;
 };
 
 export default function AddPage(){
@@ -191,6 +192,7 @@ export default function AddPage(){
         throw new Error("Your session has expired. Please sign in again.");
       }
 
+      const date = new Date()
       const { error: insertError } = await supabase
         .from("projects")
         .insert({
@@ -200,6 +202,7 @@ export default function AddPage(){
           schedule_time: reminder.schedule_time,
           phone_number: reminder.phone_number.trim(),
           message: reminder.message.trim(),
+          last_sent_at: date
         });
 
       if (insertError) {
