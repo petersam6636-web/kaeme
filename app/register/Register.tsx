@@ -5,15 +5,14 @@ import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase-client";
-
+import gsap from 'gsap';
+import {useGSAP} from '@gsap/react';
 type AuthMode = "register" | "signin";
 
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [mode, setMode] = useState<AuthMode>("register");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
+  const [mode, setMode] = useState<AuthMode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,6 +24,7 @@ export default function RegisterPage() {
 
   const isRegister = mode === "register";
 
+
   useEffect(() => {
     if (
       new URLSearchParams(window.location.search).get("error") ===
@@ -33,7 +33,14 @@ export default function RegisterPage() {
       setError("Sign in could not be completed. Please try again.");
     }
   }, []);
-
+  useGSAP(() => {
+    gsap.from('.register-page', {
+        scale: 0,
+        opacity: 0,
+        duration: 0.3
+    })
+  }, {dependencies: [mode]})
+  
   function changeMode(nextMode: AuthMode) {
     setMode(nextMode);
     setError("");
@@ -334,7 +341,7 @@ export default function RegisterPage() {
               )}
 
               <span>
-                {googleLoading ? "Connecting..." : "Continue with Google"}
+                {googleLoading ? "Signing in..." : "Continue with Google"}
               </span>
             </button>
 
