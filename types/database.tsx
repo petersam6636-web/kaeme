@@ -4,6 +4,7 @@ import type {
   ProjectInsert,
   ProjectUpdate,
 } from "./project";
+import type { Day, DayInsert } from "./day";
 
 export type Database = {
   public: {
@@ -12,6 +13,12 @@ export type Database = {
         Row: Project;
         Insert: ProjectInsert;
         Update: ProjectUpdate;
+        Relationships: [];
+      };
+      days: {
+        Row: Day;
+        Insert: DayInsert;
+        Update: Partial<DayInsert>;
         Relationships: [];
       };
     };

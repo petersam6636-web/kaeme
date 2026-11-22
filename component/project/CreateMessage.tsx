@@ -23,6 +23,7 @@ import {
 import { supabase } from "@/lib/supabase-client";
 import type { ProjectDetails } from "./CreateProject";
 import type { ProjectInsert } from "@/types/project";
+import type { DayInsert } from "@/types/day";
 
 interface CreateMessageProps {
   project: ProjectDetails;
@@ -58,6 +59,7 @@ export default function CreateMessage({
   });
 
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [draftDays, setDraftDays] = useState<string[]>([]);
   const [daysOpen, setDaysOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -131,7 +133,7 @@ export default function CreateMessage({
   }
 
   function toggleDay(day: string) {
-    setSelectedDays((previous) =>
+    setDraftDays((previous) =>
       previous.includes(day)
         ? previous.filter((selectedDay) => selectedDay !== day)
         : [...previous, day]
@@ -195,12 +197,18 @@ export default function CreateMessage({
       }
 
       if (selectedDays.length > 0) {
-        const { error: daysError } = await supabase.from("days").insert(
-          selectedDays.map((day) => ({
-            project_id: savedProjectId.current,
-            day,
-          }))
-        );
+        const projectId = savedProjectId.current;
+        if (!projectId) {
+          throw new Error("The project ID is missing. Please try again.");
+        }
+
+        const daysToInsert: DayInsert[] = selectedDays.map((day) => ({
+          project_id: projectId,
+          day: day,
+        }));
+        const { error: daysError } = await supabase
+          .from("days")
+          .insert(daysToInsert);
 
         if (daysError) {
           throw new Error(
@@ -241,10 +249,10 @@ export default function CreateMessage({
 
       <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-4">
 
-        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
+        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-transparent shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:bg-[#0b1020]/95">
 
           {/* LEFT: REMINDER FORM */}
-          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:w-1/2 lg:px-10 lg:py-4">
+          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto bg-[#0b1020]/95 px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:w-1/2 lg:bg-transparent lg:px-10 lg:py-4">
 
             <div className="mx-auto mb-3 w-full max-w-xl ">
 
@@ -396,9 +404,13 @@ export default function CreateMessage({
                 </span>
                 <button
                   type="button"
+                  aria-haspopup="dialog"
                   aria-expanded={daysOpen}
                   aria-controls="custom-days-options"
-                  onClick={() => setDaysOpen((open) => !open)}
+                  onClick={() => {
+                    setDraftDays(selectedDays);
+                    setDaysOpen(true);
+                  }}
                   className="flex w-full items-center justify-between rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3 text-left text-sm outline-none transition-all hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                 >
                   <span className="flex min-w-0 items-center gap-3">
@@ -418,54 +430,8 @@ export default function CreateMessage({
                         : "Choose days (optional)"}
                     </span>
                   </span>
-                  <ChevronDown
-                    size={17}
-                    className={`shrink-0 text-zinc-500 transition-transform ${daysOpen ? "rotate-180" : ""}`}
-                  />
+                  <ChevronDown size={17} className="shrink-0 text-zinc-500" />
                 </button>
-
-                {daysOpen && (
-                  <div
-                    id="custom-days-options"
-                    className="absolute inset-x-0 top-full z-30 mt-2 rounded-2xl border border-white/10 bg-[#111827] p-3 shadow-[0_16px_50px_rgba(0,0,0,0.55)]"
-                  >
-                    <div className="mb-2 flex items-center justify-between px-1">
-                      <p className="text-xs font-semibold text-zinc-200">
-                        Repeat on
-                      </p>
-                      <span className="text-[10px] text-zinc-500">
-                        Select any days
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
-                      {WEEKDAYS.map((day) => {
-                        const checked = selectedDays.includes(day);
-
-                        return (
-                          <label
-                            key={day}
-                            className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 text-xs font-medium transition-colors ${
-                              checked
-                                ? "border-blue-400/30 bg-blue-400/10 text-blue-200"
-                                : "border-transparent text-zinc-300 hover:bg-white/[0.05]"
-                            }`}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => toggleDay(day)}
-                              className="h-4 w-4 accent-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
-                            />
-                            {day}
-                          </label>
-                        );
-                      })}
-                    </div>
-                    <p className="mt-2 px-1 text-[10px] leading-4 text-zinc-500">
-                      Leave all days unchecked for a one-time reminder.
-                    </p>
-                  </div>
-                )}
               </div>
 
               {error && (
@@ -583,6 +549,84 @@ export default function CreateMessage({
           </div>
         </div>
       </section>
+
+      {daysOpen && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+          <div
+            id="custom-days-options"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="custom-days-title"
+            className="w-full max-w-md rounded-3xl border border-blue-400/20 bg-[#0b1020] p-5 shadow-[0_20px_100px_rgba(0,0,0,0.6)] sm:p-7"
+          >
+            <div className="mb-5 flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
+                <CalendarDays size={20} />
+              </div>
+              <div>
+                <h2
+                  id="custom-days-title"
+                  className="text-lg font-bold text-white"
+                >
+                  Choose custom days
+                </h2>
+                <p className="mt-1 text-sm text-zinc-400">
+                  Select the days you want this reminder to repeat.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {WEEKDAYS.map((day) => {
+                const checked = draftDays.includes(day);
+
+                return (
+                  <label
+                    key={day}
+                    className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-3 text-sm font-medium transition-colors ${
+                      checked
+                        ? "border-blue-400/30 bg-blue-400/10 text-blue-200"
+                        : "border-white/[0.08] text-zinc-300 hover:bg-white/[0.05]"
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleDay(day)}
+                      className="h-4 w-4 accent-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
+                    />
+                    {day}
+                  </label>
+                );
+              })}
+            </div>
+
+            <p className="mt-3 text-xs leading-5 text-zinc-500">
+              Leave all days unchecked for a one-time reminder.
+            </p>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setDaysOpen(false)}
+                className="rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-zinc-300 transition-colors hover:bg-white/[0.09] hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedDays(draftDays);
+                  setDaysOpen(false);
+                }}
+                className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-500"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showConfirmation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md">

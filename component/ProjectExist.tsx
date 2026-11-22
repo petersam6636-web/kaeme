@@ -9,7 +9,7 @@ export default function ProjectExist({
   projects,
 }: ProjectExistProps) {
   return (
-    <section className="w-full px-1.5 md:px-3">
+    <section className="w-full p-2">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
         {projects.map((project) => (
