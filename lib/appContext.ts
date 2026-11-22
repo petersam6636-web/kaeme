@@ -11,7 +11,7 @@ import {
 export type AppContextType =  {
   userInfo: string;
   setUserInfo: Dispatch<SetStateAction<string>>;
-  projectDetails: { 
+  projectDetails?: { 
     description?: string | null;
     schedule_time: string;
     phone_number: string;

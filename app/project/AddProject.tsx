@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import {
   ArrowLeft,
@@ -16,7 +17,6 @@ import {
   MessageSquare,
   Phone,
   Sparkles,
-  X,
   Zap,
 } from "lucide-react";
 
@@ -31,10 +31,10 @@ type ReminderDetails = {
   schedule_time: string;
   phone_number: string;
   message: string;
-  last_sent_at: string;
 };
 
 export default function AddPage(){
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2>(1);
 
   const [project, setProject] = useState<ProjectDetails>({
@@ -192,7 +192,6 @@ export default function AddPage(){
         throw new Error("Your session has expired. Please sign in again.");
       }
 
-      const date = new Date()
       const { error: insertError } = await supabase
         .from("projects")
         .insert({
@@ -202,7 +201,6 @@ export default function AddPage(){
           schedule_time: reminder.schedule_time,
           phone_number: reminder.phone_number.trim(),
           message: reminder.message.trim(),
-          last_sent_at: date
         });
 
       if (insertError) {
@@ -643,7 +641,7 @@ export default function AddPage(){
             <button
               type="button"
               onClick={() => {
-                window.location.href = "/home";
+                router.push("/home");
               }}
               className="mt-7 flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3.5 text-sm font-bold text-[#041009] transition-all hover:bg-emerald-400"
             >
