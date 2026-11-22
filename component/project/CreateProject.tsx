@@ -108,11 +108,11 @@ export default function CreateProject() {
         <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-sky-500/[0.1] blur-[140px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center">
-        <div className="flex h-full min-h-0 w-full max-h-none max-w-none flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:flex-row">
-          <div className="relative flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-6 py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:700px)]:justify-start sm:px-10 sm:py-8 lg:w-1/2 lg:px-14">
-            <div className="mx-auto mb-8 w-full max-w-xl">
-              <div className="mb-6 flex items-center gap-3 sm:mb-8">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center lg:px-5 lg:py-5">
+        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-7xl flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px]">
+          <div className="relative flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-5 py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-6 lg:w-1/2 lg:px-10 lg:py-5">
+            <div className="mx-auto mb-5 w-full max-w-xl sm:mb-6">
+              <div className="mb-5 flex items-center gap-3 sm:mb-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
                   <Bell size={19} />
                 </div>
@@ -135,7 +135,7 @@ export default function CreateProject() {
                 <div className="h-1 flex-1 rounded-full bg-white/10" />
               </div>
 
-              <h1 className="mt-5 text-3xl font-bold tracking-tight sm:mt-7 sm:text-4xl">
+              <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
                 Create your project.
               </h1>
               <p className="mt-3 max-w-sm text-sm leading-6 text-zinc-400">
@@ -145,7 +145,7 @@ export default function CreateProject() {
 
             <form
               onSubmit={handleContinue}
-              className="mx-auto flex w-full max-w-xl flex-col gap-4 sm:gap-5"
+              className="mx-auto flex w-full max-w-xl flex-col gap-4"
             >
               <div>
                 <label
@@ -173,7 +173,7 @@ export default function CreateProject() {
                     placeholder="e.g. Weekly meeting"
                     maxLength={100}
                     required
-                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-3.5 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                    className="w-full rounded-xl border border-white/[0.09] bg-white/[0.035] py-3 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                   />
                 </div>
               </div>
@@ -195,10 +195,10 @@ export default function CreateProject() {
                     }))
                   }
                   placeholder="What is this reminder about?"
-                  rows={4}
+                  rows={3}
                   maxLength={1000}
                   required
-                  className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3.5 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+                  className="w-full resize-none rounded-xl border border-white/[0.09] bg-white/[0.035] px-4 py-3 text-sm leading-6 text-white outline-none transition-all placeholder:text-zinc-600 hover:border-blue-400/30 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
                 />
                 <p className="mt-2 text-right text-[10px] text-zinc-600">
                   {project.description.length}/1000
@@ -213,7 +213,7 @@ export default function CreateProject() {
 
               <button
                 type="submit"
-                className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-4 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
+                className="group flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-[0_8px_30px_rgba(37,99,235,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_35px_rgba(37,99,235,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-300"
               >
                 Continue
                 <ArrowRight
@@ -223,7 +223,7 @@ export default function CreateProject() {
               </button>
             </form>
 
-            <p className="mx-auto mt-5 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-8">
+            <p className="mx-auto mt-4 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-5">
               YOUR TIME MATTERS. LET EASEWAY HELP YOU REMEMBER.
             </p>
           </div>
