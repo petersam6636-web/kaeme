@@ -108,10 +108,10 @@ export default function CreateProject() {
         <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-sky-500/[0.1] blur-[140px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-3 sm:p-4">
-        <div className="flex h-[min(740px,calc(100dvh-32px))] max-h-[calc(100dvh-32px)] min-h-0 w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:rounded-3xl lg:flex-row lg:rounded-[28px]">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center">
+        <div className="flex h-full min-h-0 w-full max-h-none max-w-none flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:flex-row">
           <div className="relative flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-6 py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:700px)]:justify-start sm:px-10 sm:py-8 lg:w-1/2 lg:px-14">
-            <div className="mb-8">
+            <div className="mx-auto mb-8 w-full max-w-xl">
               <div className="mb-6 flex items-center gap-3 sm:mb-8">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
                   <Bell size={19} />
@@ -143,7 +143,10 @@ export default function CreateProject() {
               </p>
             </div>
 
-            <form onSubmit={handleContinue} className="flex flex-col gap-4 sm:gap-5">
+            <form
+              onSubmit={handleContinue}
+              className="mx-auto flex w-full max-w-xl flex-col gap-4 sm:gap-5"
+            >
               <div>
                 <label
                   htmlFor="project-name"
@@ -220,7 +223,7 @@ export default function CreateProject() {
               </button>
             </form>
 
-            <p className="mt-5 text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-8">
+            <p className="mx-auto mt-5 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-8">
               YOUR TIME MATTERS. LET EASEWAY HELP YOU REMEMBER.
             </p>
           </div>

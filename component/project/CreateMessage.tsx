@@ -147,6 +147,7 @@ export default function CreateMessage({
           schedule_time: reminder.time,
           phone_number: reminder.phone.trim(),
           message: reminder.message.trim(),
+          last_sent_at: new Date()
         });
 
       if (insertError) {
@@ -174,14 +175,14 @@ export default function CreateMessage({
         <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-3 sm:p-4">
+      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center">
 
-        <div className="flex h-[min(740px,calc(100dvh-32px))] max-h-[calc(100dvh-32px)] min-h-0 w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020]/90 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:rounded-3xl lg:flex-row lg:rounded-[28px]">
+        <div className="flex h-full min-h-0 w-full max-h-none max-w-none flex-col overflow-hidden border border-white/[0.08] bg-[#0b1020]/95 shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:flex-row">
 
           {/* LEFT: REMINDER FORM */}
           <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto px-6 py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:700px)]:justify-start sm:px-10 sm:py-8 lg:w-1/2 lg:px-14">
 
-            <div className="mb-8">
+            <div className="mx-auto mb-8 w-full max-w-xl">
 
               <div className="mb-6 flex items-center justify-between sm:mb-8">
                 <div className="flex items-center gap-3">
@@ -230,7 +231,7 @@ export default function CreateMessage({
             </div>
 
             {/* Project preview */}
-            <div className="mb-4 flex items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-3 sm:mb-6">
+            <div className="mx-auto mb-4 flex w-full max-w-xl items-center gap-3 rounded-xl border border-blue-400/15 bg-blue-400/[0.045] p-3 sm:mb-6">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-400/10 text-blue-300">
                 <CheckCircle2 size={19} />
               </div>
@@ -247,7 +248,10 @@ export default function CreateMessage({
               <Check size={16} className="ml-auto shrink-0 text-blue-400" />
             </div>
 
-            <form onSubmit={handleCreate} className="flex flex-col gap-4 sm:gap-5">
+            <form
+              onSubmit={handleCreate}
+              className="mx-auto flex w-full max-w-xl flex-col gap-4 sm:gap-5"
+            >
 
               {/* Time */}
               <div>
@@ -345,7 +349,7 @@ export default function CreateMessage({
               </button>
             </form>
 
-            <p className="mt-5 text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-8">
+            <p className="mx-auto mt-5 w-full max-w-xl text-center text-[10px] tracking-[0.18em] text-zinc-600 sm:mt-8">
               ONE MORE STEP TO A MORE ORGANIZED YOU.
             </p>
           </div>
