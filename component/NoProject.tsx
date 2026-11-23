@@ -17,7 +17,7 @@ export default function NoProject({
   }
 
   return (
-    <section className="flex min-h-[100dvh] w-full items-center justify-center px-1.5 md:px-3">
+    <section className="flex min-h-[100dvh] w-full items-center justify-center p-2 md:p-3">
       <div className="glass-panel flex min-h-[300px] w-full max-w-xl flex-col items-center justify-center rounded-2xl px-5 text-center text-zinc-100">
 
         <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-blue-300/30 bg-blue-400/15 text-blue-200">
