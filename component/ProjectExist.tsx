@@ -3,7 +3,9 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Project } from "@/types/project";
+import { supabase } from "@/lib/supabase-client";
 import {
   Search,
   Plus,
@@ -14,14 +16,12 @@ import {
   ChevronDown,
   ChevronUp,
   Trash2,
-  MoreVertical,
   Bell,
   CheckCircle2,
   AlertCircle,
   LoaderCircle,
   X,
   LogOut,
-  UserRound,
   Send,
 } from "lucide-react";
 
@@ -48,9 +48,11 @@ export default function ProjectExist({
   onDelete,
   onSignOut,
 }: ProjectExistProps) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<string[]>([]);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [profileError, setProfileError] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -72,7 +74,7 @@ export default function ProjectExist({
     );
   }, [projects, search]);
 
-  const toggleDays = (id: string) => {
+  const toggleDetails = (id: string) => {
     setExpanded((previous) =>
       previous.includes(id)
         ? previous.filter((item) => item !== id)
@@ -156,13 +158,25 @@ export default function ProjectExist({
   };
 
   const handleSignOut = async () => {
-    if (!onSignOut) return;
-
+    setProfileError("");
+    setSigningOut(true);
     try {
-      setSigningOut(true);
-      await onSignOut();
+      if (onSignOut) {
+        await onSignOut();
+      } else {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+      }
+
+      router.replace("/register");
+      router.refresh();
     } catch (error) {
       console.error("Sign out failed:", error);
+      setProfileError(
+        error instanceof Error
+          ? error.message
+          : "Unable to sign out. Please try again."
+      );
       setSigningOut(false);
     }
   };
@@ -180,90 +194,113 @@ export default function ProjectExist({
   ).length;
 
   return (
-    <section className="min-h-[100dvh] w-full bg-[#050816] px-4 py-6 text-zinc-100 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-7xl">
-
-      {/* HEADER */}
-      <header className="mb-8 flex items-center justify-between gap-4">
-
-        {/* SEARCH */}
-        <div className="relative w-full max-w-md">
-          <Search
-            size={19}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
-          />
-
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search your reminders..."
-            aria-label="Search reminders"
-            className="w-full rounded-2xl border border-white/[0.08] bg-[#080d1b] py-3 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
-          />
-        </div>
-
-        {/* PROFILE */}
-        <div className="relative shrink-0">
-
-          <button
-            type="button"
-            onClick={() => setProfileOpen(!profileOpen)}
-            aria-label="Open profile menu"
-            aria-expanded={profileOpen}
-            className="flex size-11 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0b1020] transition hover:border-blue-400/50"
+    <section className="min-h-[100dvh] w-full bg-[#050816] text-zinc-100">
+      <header className="w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            className="flex w-fit cursor-pointer items-center gap-3 rounded-lg text-white transition hover:text-blue-200"
           >
-            {user?.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                alt={user?.name ? `${user.name}'s profile` : "Profile"}
-                className="size-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <span className="font-semibold text-blue-200">
-                {initials}
-              </span>
-            )}
-          </button>
+            <span className="flex size-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
+              <Bell size={19} />
+            </span>
+            <span className="text-lg font-bold tracking-tight">Easeway</span>
+          </Link>
 
-          {profileOpen && (
-            <>
+          <div
+            role="search"
+            className="relative col-span-2 row-start-2 w-full sm:col-span-1 sm:row-auto"
+          >
+            <Search
+              size={19}
+              aria-hidden="true"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search reminders, messages, or days..."
+              aria-label="Search reminders"
+              className="w-full rounded-2xl border border-white/[0.08] bg-[#080d1b] py-3 pl-11 pr-11 text-sm text-white outline-none transition placeholder:text-zinc-500 focus:border-blue-400/50 focus:ring-4 focus:ring-blue-400/[0.06]"
+            />
+            {search && (
               <button
                 type="button"
-                aria-label="Close profile menu"
-                onClick={() => setProfileOpen(false)}
-                className="fixed inset-0 z-30 cursor-default"
-              />
+                onClick={() => setSearch("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-zinc-400 transition hover:bg-white/5 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
 
-              <div className="absolute right-0 top-14 z-40 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="relative row-start-1 shrink-0 sm:col-start-3 sm:row-auto">
+            <button
+              type="button"
+              onClick={() => setProfileOpen(!profileOpen)}
+              aria-label="Open profile menu"
+              aria-expanded={profileOpen}
+              className="flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0b1020] transition hover:border-blue-400/50"
+            >
+              {user?.avatar_url ? (
+                <img
+                  src={user.avatar_url}
+                  alt={user.name ? `${user.name}'s profile` : "Profile"}
+                  className="size-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className="font-semibold text-blue-200">
+                  {initials}
+                </span>
+              )}
+            </button>
 
-                <div className="border-b border-white/10 p-4">
-                  <p className="truncate text-sm font-semibold text-white">
-                    {user?.name || "Your Account"}
-                  </p>
+            {profileOpen && (
+              <>
+                <button
+                  type="button"
+                  aria-label="Close profile menu"
+                  onClick={() => setProfileOpen(false)}
+                  className="fixed inset-0 z-30 cursor-pointer"
+                />
 
-                  <p className="mt-1 truncate text-xs text-zinc-500">
-                    {user?.email || "Authenticated user"}
-                  </p>
+                <div className="absolute right-0 top-14 z-40 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="border-b border-white/10 p-4">
+                    <p className="truncate text-sm font-semibold text-white">
+                      {user?.name || "Your Account"}
+                    </p>
+                    <p className="mt-1 truncate text-xs text-zinc-500">
+                      {user?.email || "Authenticated user"}
+                    </p>
+                  </div>
+
+                  <div className="p-2">
+                    {profileError && (
+                      <p role="alert" className="px-3 py-2 text-xs text-red-300">
+                        {profileError}
+                      </p>
+                    )}
+                    <button
+                      type="button"
+                      disabled={signingOut}
+                      onClick={handleSignOut}
+                      className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-300 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <LogOut size={17} />
+                      {signingOut ? "Signing out..." : "Sign out"}
+                    </button>
+                  </div>
                 </div>
-
-                <div className="p-2">
-                  <button
-                    type="button"
-                    disabled={!onSignOut || signingOut}
-                    onClick={handleSignOut}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-red-500 transition hover:bg-red-500/10 disabled:opacity-50"
-                  >
-                    <LogOut size={17} />
-                    {signingOut ? "Signing out..." : "Sign out"}
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       </header>
+
+      <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
       {/* PAGE TITLE */}
       <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -287,7 +324,7 @@ export default function ProjectExist({
 
         <Link
           href="/project"
-          className="inline-flex items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/15 transition hover:-translate-y-0.5 hover:bg-blue-700 active:scale-95 sm:self-center"
+          className="inline-flex cursor-pointer items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/15 transition hover:-translate-y-0.5 hover:bg-blue-700 active:scale-95 sm:self-center"
         >
           <Plus size={19} />
           Create Reminder
@@ -357,7 +394,7 @@ export default function ProjectExist({
       {/* PROJECT CARDS */}
       {filteredProjects.length > 0 ? (
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
 
           {filteredProjects.map((project) => {
             const isExpanded = expanded.includes(project.id);
@@ -370,11 +407,10 @@ export default function ProjectExist({
             return (
               <article
                 key={project.id}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020] transition duration-300 hover:-translate-y-1 hover:border-blue-400/30 hover:shadow-xl hover:shadow-blue-500/5"
+                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020] shadow-[0_14px_45px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-blue-400/30 hover:shadow-[0_20px_55px_rgba(37,99,235,0.12)]"
               >
 
-                {/* BLUE TOP ACCENT */}
-                <div className="absolute left-0 top-0 h-1 w-0 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+                <div className="absolute left-0 top-0 h-1 w-0 bg-gradient-to-r from-blue-400 to-sky-300 transition-all duration-300 group-hover:w-full" />
 
                 <div className="p-5">
 
@@ -415,148 +451,145 @@ export default function ProjectExist({
                         type="button"
                         onClick={() => setDeleteId(project.id)}
                         aria-label={`Delete ${project.name}`}
-                        className="rounded-xl p-2 text-zinc-400 transition hover:bg-red-500/10 hover:text-red-500"
+                        className="cursor-pointer rounded-xl p-2 text-zinc-400 transition hover:bg-red-500/10 hover:text-red-300"
                       >
                         <Trash2 size={18} />
                       </button>
                     )}
                   </div>
 
-                  {/* DESCRIPTION */}
-                  {project.description && (
-                    <p className="mt-4 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
-                      {project.description}
-                    </p>
-                  )}
-
-                  {/* REMINDER INFORMATION */}
-                  <div className="mt-5 grid grid-cols-2 gap-4 border-y border-white/10 py-4">
-
-                    <div className="flex items-start gap-3">
-                      <Clock3 size={18} className="mt-0.5 shrink-0 text-blue-300" />
-
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold">
-                          {formatTime(project.schedule_time)}
-                        </p>
-                        <p className="mt-1 text-xs text-zinc-400">
-                          Schedule time
-                        </p>
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
+                      <div className="flex items-center gap-2 text-blue-300">
+                        <Clock3 size={16} />
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                          Reminder time
+                        </span>
                       </div>
+                      <p className="mt-2 text-lg font-semibold text-white">
+                        {formatTime(project.schedule_time)}
+                      </p>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <Phone size={18} className="mt-0.5 shrink-0 text-blue-300" />
-
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">
-                          {project.phone_number}
-                        </p>
-                        <p className="mt-1 text-xs text-zinc-400">
-                          Phone number
-                        </p>
+                    <div className="rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
+                      <div className="flex items-center gap-2 text-blue-300">
+                        <CalendarDays size={16} />
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                          Scheduled days
+                        </span>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {days.length > 0 ? (
+                          days.map((day) => (
+                            <span
+                              key={day.id}
+                              className="rounded-lg border border-blue-400/20 bg-blue-400/10 px-2 py-1 text-[11px] font-medium text-blue-200"
+                            >
+                              {day.days}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-sm text-zinc-300">
+                            One-time reminder
+                          </span>
+                        )}
                       </div>
                     </div>
+                  </div>
 
-                    <div className="col-span-2 flex items-start gap-3">
-                      <MessageSquare size={18} className="mt-0.5 shrink-0 text-blue-300" />
-
+                  <div className="mt-3 rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
+                    <div className="flex items-start gap-3">
+                      <MessageSquare
+                        size={17}
+                        className="mt-0.5 shrink-0 text-blue-300"
+                      />
                       <div className="min-w-0">
-                        <p className="text-sm leading-6 text-zinc-300">
-                          {project.message || "No reminder message provided."}
-                        </p>
-                        <p className="mt-1 text-xs text-zinc-400">
+                        <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
                           Reminder message
                         </p>
+                        <p className="mt-2 line-clamp-3 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-200">
+                          {project.message || "No reminder message provided."}
+                        </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* REMINDER TIMESTAMPS */}
-                  <div className="mt-4 grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => toggleDetails(project.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={`project-details-${project.id}`}
+                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-xl border border-white/[0.06] px-4 py-3 text-sm font-semibold text-zinc-300 transition hover:border-blue-400/20 hover:bg-blue-400/[0.04] hover:text-white"
+                  >
+                    {isExpanded ? "Show less" : "Show more"}
+                    {isExpanded ? (
+                      <ChevronUp size={17} />
+                    ) : (
+                      <ChevronDown size={17} />
+                    )}
+                  </button>
 
-                    <div>
-                      <p className="text-[11px] text-zinc-400">
-                        Created on
-                      </p>
-                      <p className="mt-1 flex items-center gap-1.5 text-xs font-medium">
-                        <CalendarDays size={13} className="text-blue-300" />
-                        {formatDate(project.created_at)}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-[11px] text-zinc-400">
-                        Last sent
-                      </p>
-                      <p className="mt-1 flex items-center gap-1.5 text-xs font-medium">
-                        <Send size={13} className="text-blue-300" />
-                        {formatDate(
-                          project.last_sent_at || project.sent_at
-                        )}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* EXPAND DAYS */}
-                  <div className="mt-5 border-t border-white/10 pt-4">
-
-                    <button
-                      type="button"
-                      onClick={() => toggleDays(project.id)}
-                      aria-expanded={isExpanded}
-                      className="flex w-full items-center justify-between rounded-xl py-2 text-sm font-semibold transition hover:text-blue-300"
-                    >
-                      <span className="flex items-center gap-2">
-                        <CalendarDays size={17} className="text-blue-300" />
-                        Scheduled days
-
-                        <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] text-blue-300">
-                          {days.length}
-                        </span>
-                      </span>
-
-                      <span className="flex items-center gap-1 text-xs text-zinc-400">
-                        {isExpanded ? "Hide days" : "Show days"}
-
-                        {isExpanded ? (
-                          <ChevronUp size={17} />
-                        ) : (
-                          <ChevronDown size={17} />
-                        )}
-                      </span>
-                    </button>
-
-                    {/* ANIMATED DAYS CONTENT */}
+                  {isExpanded && (
                     <div
-                      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${
-                        isExpanded
-                          ? "grid-rows-[1fr] opacity-100"
-                          : "grid-rows-[0fr] opacity-0"
-                      }`}
+                      id={`project-details-${project.id}`}
+                      className="mt-3 grid gap-3 rounded-xl border border-white/[0.06] bg-[#080d1b] p-4 sm:grid-cols-2"
                     >
-                      <div className="overflow-hidden">
-                        <div className="flex flex-wrap gap-2 pb-2 pt-3">
-
-                          {days.length > 0 ? (
-                            days.map((day) => (
-                              <span
-                                key={day.id}
-                                className="rounded-xl border border-blue-400/20 bg-blue-400/5 px-3 py-2 text-xs font-medium text-blue-300"
-                              >
-                                {day.days}
-                              </span>
-                            ))
-                          ) : (
-                            <p className="py-2 text-xs text-zinc-400">
-                              No scheduled days found.
-                            </p>
-                          )}
-
+                      {project.description && (
+                        <div className="sm:col-span-2">
+                          <p className="text-[11px] font-medium text-zinc-500">
+                            Project description
+                          </p>
+                          <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-300">
+                            {project.description}
+                          </p>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-2">
+                        <Phone
+                          size={15}
+                          className="mt-0.5 shrink-0 text-blue-300"
+                        />
+                        <div className="min-w-0">
+                          <p className="text-[11px] text-zinc-500">
+                            Phone number
+                          </p>
+                          <p className="mt-1 break-all text-sm text-zinc-200">
+                            {project.phone_number}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <CalendarDays
+                          size={15}
+                          className="mt-0.5 shrink-0 text-blue-300"
+                        />
+                        <div>
+                          <p className="text-[11px] text-zinc-500">
+                            Created on
+                          </p>
+                          <p className="mt-1 text-sm text-zinc-200">
+                            {formatDate(project.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Send
+                          size={15}
+                          className="mt-0.5 shrink-0 text-blue-300"
+                        />
+                        <div>
+                          <p className="text-[11px] text-zinc-500">
+                            Last sent
+                          </p>
+                          <p className="mt-1 text-sm text-zinc-200">
+                            {formatDate(
+                              project.last_sent_at || project.sent_at
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                 </div>
 
@@ -588,7 +621,7 @@ export default function ProjectExist({
                           type="button"
                           disabled={deleting}
                           onClick={() => setDeleteId(null)}
-                          className="flex-1 rounded-xl border border-white/10 px-3 py-2.5 text-sm font-semibold transition hover:bg-white/5 disabled:opacity-50"
+                          className="flex-1 cursor-pointer rounded-xl border border-white/10 px-3 py-2.5 text-sm font-semibold transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           Cancel
                         </button>
@@ -597,7 +630,7 @@ export default function ProjectExist({
                           type="button"
                           disabled={deleting}
                           onClick={() => handleDelete(project.id)}
-                          className="flex-1 rounded-xl bg-red-500 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600 disabled:opacity-50"
+                          className="flex-1 cursor-pointer rounded-xl bg-red-500 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {deleting ? "Deleting..." : "Delete"}
                         </button>
@@ -635,7 +668,7 @@ export default function ProjectExist({
           {!search && (
             <Link
               href="/project"
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-95"
+              className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 active:scale-95"
             >
               <Plus size={17} />
               Create Reminder
@@ -645,7 +678,7 @@ export default function ProjectExist({
         </div>
       )}
 
-      </div>
+      </main>
     </section>
   );
 }
