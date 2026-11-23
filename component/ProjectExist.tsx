@@ -15,6 +15,7 @@ import {
   CalendarDays,
   ChevronDown,
   ChevronUp,
+  MoreVertical,
   Trash2,
   Bell,
   CheckCircle2,
@@ -54,6 +55,8 @@ export default function ProjectExist({
   const [profileOpen, setProfileOpen] = useState(false);
   const [profileError, setProfileError] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState("");
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
 
@@ -144,14 +147,37 @@ export default function ProjectExist({
   };
 
   const handleDelete = async (id: string) => {
-    if (!onDelete) return;
-
+    setDeleteError("");
+    setDeleting(true);
     try {
-      setDeleting(true);
-      await onDelete(id);
+      if (onDelete) {
+        await onDelete(id);
+      } else {
+        const { data: deletedProject, error } = await supabase
+          .from("projects")
+          .delete()
+          .eq("id", id)
+          .select("id")
+          .maybeSingle();
+
+        if (error) throw error;
+        if (!deletedProject) {
+          throw new Error(
+            "This reminder was not found or you do not have permission to delete it."
+          );
+        }
+      }
+
       setDeleteId(null);
+      setOpenMenuId(null);
+      router.refresh();
     } catch (error) {
       console.error("Failed to delete reminder:", error);
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "Unable to delete this reminder. Please try again."
+      );
     } finally {
       setDeleting(false);
     }
@@ -267,7 +293,7 @@ export default function ProjectExist({
                   className="fixed inset-0 z-30 cursor-pointer"
                 />
 
-                <div className="absolute right-0 top-14 z-40 w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200 sm:w-64">
+                <div className="absolute right-0 top-14 z-40 w-52 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200 sm:w-64">
                   <div className="border-b border-white/10 p-4">
                     <p className="truncate text-sm font-semibold text-white">
                       {user?.name || "Your Account"}
@@ -387,17 +413,43 @@ export default function ProjectExist({
                       </div>
                     </div>
 
-                    {/* DELETE MENU */}
-                    {onDelete && (
+                    <div className="relative">
                       <button
                         type="button"
-                        onClick={() => setDeleteId(project.id)}
-                        aria-label={`Delete ${project.name}`}
-                        className="cursor-pointer rounded-xl p-2 text-zinc-400 transition hover:bg-red-500/10 hover:text-red-300"
+                        onClick={() =>
+                          setOpenMenuId((current) =>
+                            current === project.id ? null : project.id
+                          )
+                        }
+                        aria-label={`More actions for ${project.name}`}
+                        aria-haspopup="menu"
+                        aria-expanded={openMenuId === project.id}
+                        className="cursor-pointer rounded-xl p-2 text-zinc-400 transition hover:bg-white/[0.06] hover:text-white"
                       >
-                        <Trash2 size={18} />
+                        <MoreVertical size={19} />
                       </button>
-                    )}
+
+                      {openMenuId === project.id && (
+                        <div
+                          role="menu"
+                          className="absolute right-0 top-full z-30 mt-1 w-44 overflow-hidden rounded-xl border border-white/10 bg-[#080d1b] p-1.5 shadow-[0_14px_40px_rgba(0,0,0,0.5)]"
+                        >
+                          <button
+                            type="button"
+                            role="menuitem"
+                            onClick={() => {
+                              setDeleteError("");
+                              setDeleteId(project.id);
+                              setOpenMenuId(null);
+                            }}
+                            className="flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+                          >
+                            <Trash2 size={16} />
+                            Delete reminder
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-[0.9fr_1.1fr]">
@@ -558,6 +610,15 @@ export default function ProjectExist({
                         </span>
                         ? This action cannot be undone.
                       </p>
+
+                      {deleteError && (
+                        <p
+                          role="alert"
+                          className="mt-3 rounded-lg border border-red-400/20 bg-red-400/[0.06] px-3 py-2 text-left text-xs leading-5 text-red-300"
+                        >
+                          {deleteError}
+                        </p>
+                      )}
 
                       <div className="mt-5 flex gap-2">
 
