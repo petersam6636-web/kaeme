@@ -223,7 +223,7 @@ export default function ProjectExist({
   );
 
   return (
-    <section className="min-h-[100dvh] w-full bg-[#050816]/50 text-zinc-100">
+    <section className="min-h-[100dvh] w-full bg-[#050816]/45 text-zinc-100">
       <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
           <Link
