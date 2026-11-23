@@ -218,14 +218,17 @@ export default function ProjectExist({
   const totalPending = projects.filter(
     (project) => project.status === "pending"
   ).length;
+  const projectPendingDelete = projects.find(
+    (project) => project.id === deleteId
+  );
 
   return (
     <section className="min-h-[100dvh] w-full bg-[#050816]/50 text-zinc-100">
       <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
           <Link
             href="/"
-            className="flex w-fit cursor-pointer items-center gap-3 rounded-lg text-white transition hover:text-blue-200"
+            className="col-start-1 row-start-1 flex w-fit cursor-pointer items-center gap-3 rounded-lg text-white transition hover:text-blue-200"
           >
             <span className="flex size-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
               <Bell size={19} />
@@ -235,7 +238,7 @@ export default function ProjectExist({
 
           <div
             role="search"
-            className="relative col-span-2 row-start-2 w-full sm:col-span-1 sm:row-auto"
+            className="relative col-span-2 col-start-1 row-start-2 w-full sm:col-span-1 sm:col-start-2 sm:row-start-1"
           >
             <Search
               size={19}
@@ -262,7 +265,7 @@ export default function ProjectExist({
             )}
           </div>
 
-          <div className="relative row-start-1 shrink-0 sm:col-start-3 sm:row-auto">
+          <div className="relative col-start-2 row-start-1 shrink-0 justify-self-end sm:col-start-3">
             <button
               type="button"
               onClick={() => setProfileOpen(!profileOpen)}
@@ -293,7 +296,7 @@ export default function ProjectExist({
                   className="fixed inset-0 z-30 cursor-pointer"
                 />
 
-                <div className="absolute right-0 top-14 z-40 w-52 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200 sm:w-64">
+                <div className="absolute right-0 left-auto top-14 z-40 w-52 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200 sm:w-64">
                   <div className="border-b border-white/10 p-4">
                     <p className="truncate text-sm font-semibold text-white">
                       {user?.name || "Your Account"}
@@ -366,7 +369,6 @@ export default function ProjectExist({
 
           {filteredProjects.map((project) => {
             const isExpanded = expanded.includes(project.id);
-            const isDeleting = deleteId === project.id;
             const status = statusStyle(project.status);
             const StatusIcon = status.icon;
 
@@ -589,62 +591,6 @@ export default function ProjectExist({
 
                 </div>
 
-                {/* DELETE CONFIRMATION */}
-                {isDeleting && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#080d1b]/95 p-5 backdrop-blur-sm">
-
-                    <div className="w-full max-w-xs text-center">
-
-                      <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-red-500/10 text-red-500">
-                        <Trash2 size={23} />
-                      </div>
-
-                      <h3 className="font-bold">
-                        Delete reminder?
-                      </h3>
-
-                      <p className="mt-2 text-sm leading-6 text-zinc-500">
-                        Are you sure you want to delete{" "}
-                        <span className="font-semibold text-white">
-                          {project.name}
-                        </span>
-                        ? This action cannot be undone.
-                      </p>
-
-                      {deleteError && (
-                        <p
-                          role="alert"
-                          className="mt-3 rounded-lg border border-red-400/20 bg-red-400/[0.06] px-3 py-2 text-left text-xs leading-5 text-red-300"
-                        >
-                          {deleteError}
-                        </p>
-                      )}
-
-                      <div className="mt-5 flex gap-2">
-
-                        <button
-                          type="button"
-                          disabled={deleting}
-                          onClick={() => setDeleteId(null)}
-                          className="flex-1 cursor-pointer rounded-xl border border-white/10 px-3 py-2.5 text-sm font-semibold transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          Cancel
-                        </button>
-
-                        <button
-                          type="button"
-                          disabled={deleting}
-                          onClick={() => handleDelete(project.id)}
-                          className="flex-1 cursor-pointer rounded-xl bg-red-500 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {deleting ? "Deleting..." : "Delete"}
-                        </button>
-
-                      </div>
-                    </div>
-                  </div>
-                )}
-
               </article>
             );
           })}
@@ -680,6 +626,70 @@ export default function ProjectExist({
             </Link>
           )}
 
+        </div>
+      )}
+
+      {projectPendingDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-md">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-reminder-title"
+            aria-describedby="delete-reminder-description"
+            className="w-full max-w-md rounded-3xl border border-red-400/20 bg-[#0b1020] p-6 shadow-[0_24px_90px_rgba(0,0,0,0.65)] sm:p-8"
+          >
+            <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl border border-red-400/20 bg-red-400/10 text-red-300">
+              <Trash2 size={23} />
+            </div>
+
+            <h2
+              id="delete-reminder-title"
+              className="text-center text-xl font-bold text-white"
+            >
+              Delete reminder?
+            </h2>
+            <p
+              id="delete-reminder-description"
+              className="mt-3 text-center text-sm leading-6 text-zinc-400"
+            >
+              Delete{" "}
+              <span className="font-semibold text-zinc-100">
+                {projectPendingDelete.name}
+              </span>
+              ? This action cannot be undone.
+            </p>
+
+            {deleteError && (
+              <p
+                role="alert"
+                className="mt-4 rounded-xl border border-red-400/20 bg-red-400/[0.06] px-3 py-2.5 text-sm leading-5 text-red-300"
+              >
+                {deleteError}
+              </p>
+            )}
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row">
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => {
+                  setDeleteId(null);
+                  setDeleteError("");
+                }}
+                className="flex-1 cursor-pointer rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-semibold text-zinc-300 transition hover:bg-white/[0.08] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={() => handleDelete(projectPendingDelete.id)}
+                className="flex-1 cursor-pointer rounded-xl bg-red-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {deleting ? "Deleting..." : "Delete reminder"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
