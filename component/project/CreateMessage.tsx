@@ -235,7 +235,7 @@ export default function CreateMessage({
   }
 
   return (
-    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-transparent lg:bg-[#050816] text-white">
+    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-x-hidden bg-transparent text-white lg:h-[100dvh] lg:max-h-[100dvh] lg:overflow-hidden lg:bg-[#050816]">
 
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
@@ -243,12 +243,12 @@ export default function CreateMessage({
         <div className="absolute -bottom-40 -right-40 h-[450px] w-[450px] rounded-full bg-sky-500/[0.1] blur-[130px]" />
       </div>
 
-      <section className="relative z-10 flex h-full min-h-0 w-full items-center justify-center p-4">
+      <section className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center p-4 lg:h-[100dvh] lg:min-h-0">
 
-        <div className="flex h-full min-h-0 w-full max-h-[100dvh] max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-transparent shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:bg-[#0b1020]/95">
+        <div className="flex min-h-[calc(100dvh-2rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-transparent shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:h-full lg:min-h-0 lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:bg-[#0b1020]/95">
 
           {/* LEFT: REMINDER FORM */}
-          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-y-auto bg-[#0b1020]/95 px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:w-1/2 lg:bg-transparent lg:px-10 lg:py-4">
+          <div className="flex w-full flex-1 flex-col justify-center bg-[#0b1020]/95 px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:min-h-0 lg:w-1/2 lg:overflow-y-auto lg:bg-transparent lg:px-10 lg:py-4">
 
             <div className="mx-auto mb-3 w-full max-w-xl ">
 

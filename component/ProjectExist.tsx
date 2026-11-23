@@ -194,8 +194,8 @@ export default function ProjectExist({
   ).length;
 
   return (
-    <section className="min-h-[100dvh] w-full bg-[#050816]/60 text-zinc-100">
-      <header className="w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
+    <section className="min-h-[100dvh] w-full bg-[#050816]/50 text-zinc-100">
+      <header className="sticky inset-x-0 top-0 z-50 w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
           <Link
             href="/"
@@ -500,23 +500,6 @@ export default function ProjectExist({
                     </div>
                   </div>
 
-                  <div className="mt-3 rounded-2xl border border-white/[0.07] bg-[#080d1b]/80 p-4">
-                    <div className="flex items-start gap-3">
-                      <MessageSquare
-                        size={17}
-                        className="mt-0.5 shrink-0 text-blue-200"
-                      />
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
-                          Reminder message
-                        </p>
-                        <p className="mt-2 line-clamp-3 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-200">
-                          {project.message || "No reminder message provided."}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
                   <button
                     type="button"
                     onClick={() => toggleDetails(project.id)}
@@ -537,6 +520,22 @@ export default function ProjectExist({
                       id={`project-details-${project.id}`}
                       className="mt-3 grid gap-4 rounded-2xl border border-white/[0.07] bg-[#080d1b]/90 p-4 sm:grid-cols-2"
                     >
+                      <div className="sm:col-span-2">
+                        <div className="flex items-start gap-3">
+                          <MessageSquare
+                            size={17}
+                            className="mt-0.5 shrink-0 text-blue-200"
+                          />
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
+                              Reminder message
+                            </p>
+                            <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-200">
+                              {project.message || "No reminder message provided."}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                       {project.description && (
                         <div className="sm:col-span-2">
                           <p className="text-[11px] font-medium text-zinc-500">
