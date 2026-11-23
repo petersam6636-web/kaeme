@@ -242,7 +242,7 @@ export default function ProjectExist({
               onClick={() => setProfileOpen(!profileOpen)}
               aria-label="Open profile menu"
               aria-expanded={profileOpen}
-              className="flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0b1020] transition hover:border-blue-400/50"
+              className="flex size-11 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#0b1020] transition-all duration-200 hover:border-blue-300/60 hover:shadow-[0_0_24px_rgba(59,130,246,0.35)] hover:ring-4 hover:ring-blue-400/10"
             >
               {user?.avatar_url ? (
                 <img
@@ -267,7 +267,7 @@ export default function ProjectExist({
                   className="fixed inset-0 z-30 cursor-pointer"
                 />
 
-                <div className="absolute right-0 top-14 z-40 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute right-0 top-14 z-40 w-56 max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020] shadow-[0_18px_50px_rgba(0,0,0,0.5)] animate-in fade-in slide-in-from-top-2 duration-200 sm:w-64">
                   <div className="border-b border-white/10 p-4">
                     <p className="truncate text-sm font-semibold text-white">
                       {user?.name || "Your Account"}
@@ -331,65 +331,7 @@ export default function ProjectExist({
         </Link>
       </div>
 
-      {/* OVERVIEW */}
-      <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-500">Total reminders</span>
-            <Bell size={18} className="text-blue-300" />
-          </div>
-
-          <p className="mt-3 text-2xl font-bold tabular-nums">
-            {projects.length}
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-400">
-            All your created reminders
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-500">Pending</span>
-            <Clock3 size={18} className="text-blue-300" />
-          </div>
-
-          <p className="mt-3 text-2xl font-bold tabular-nums">
-            {totalPending}
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-400">
-            Waiting to be sent
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0b1020] p-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-500">Successfully sent</span>
-            <Send size={18} className="text-blue-300" />
-          </div>
-
-          <p className="mt-3 text-2xl font-bold tabular-nums">
-            {totalSent}
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-400">
-            Completed reminders
-          </p>
-        </div>
-      </div>
-
-      {/* PROJECTS SECTION */}
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-bold">Your Projects</h2>
-          <p className="mt-1 text-xs text-zinc-500">
-            {filteredProjects.length} reminder
-            {filteredProjects.length !== 1 ? "s" : ""} found
-          </p>
-        </div>
-      </div>
 
       {/* PROJECT CARDS */}
       {filteredProjects.length > 0 ? (

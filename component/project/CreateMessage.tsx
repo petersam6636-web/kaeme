@@ -245,7 +245,7 @@ export default function CreateMessage({
 
       <section className="relative z-10 flex min-h-[100dvh] w-full items-center justify-center p-4 lg:h-[100dvh] lg:min-h-0">
 
-        <div className="flex min-h-[calc(100dvh-2rem)] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-transparent shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:h-full lg:min-h-0 lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:bg-[#0b1020]/95">
+        <div className="flex h-auto min-h-0 w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-white/[0.08] bg-transparent shadow-[0_25px_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl lg:h-full lg:min-h-0 lg:max-h-[min(740px,calc(100dvh-40px))] lg:flex-row lg:rounded-[28px] lg:bg-[#0b1020]/95">
 
           {/* LEFT: REMINDER FORM */}
           <div className="flex w-full flex-1 flex-col justify-center bg-[#0b1020]/95 px-5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [@media(max-height:760px)]:justify-start sm:px-8 sm:py-5 lg:min-h-0 lg:w-1/2 lg:overflow-y-auto lg:bg-transparent lg:px-10 lg:py-4">
