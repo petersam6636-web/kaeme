@@ -235,7 +235,7 @@ export default function CreateMessage({
   }
 
   return (
-    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
+    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-transparent lg:bg-[#050816] text-white">
 
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">

@@ -115,7 +115,7 @@ export default function CreateProject() {
   }
 
   return (
-    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-[#050816] text-white">
+    <main className="relative flex h-[100dvh] max-h-[100dvh] w-full items-center justify-center overflow-hidden bg-transparent lg:bg-[#050816] text-white">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 -top-40 h-[450px] w-[450px] rounded-full bg-blue-500/[0.12] blur-[130px]" />
         <div className="absolute -bottom-48 -right-40 h-[500px] w-[500px] rounded-full bg-sky-500/[0.1] blur-[140px]" />

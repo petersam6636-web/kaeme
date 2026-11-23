@@ -194,7 +194,7 @@ export default function ProjectExist({
   ).length;
 
   return (
-    <section className="min-h-[100dvh] w-full bg-[#050816] text-zinc-100">
+    <section className="min-h-[100dvh] w-full bg-[#050816]/60 text-zinc-100">
       <header className="w-full border-b border-white/[0.07] bg-[#0b1020]/95 shadow-[0_8px_35px_rgba(0,0,0,0.2)]">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[1fr_auto] items-center gap-4 px-4 py-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:px-6 lg:px-8">
           <Link
@@ -204,7 +204,7 @@ export default function ProjectExist({
             <span className="flex size-10 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10 text-blue-300">
               <Bell size={19} />
             </span>
-            <span className="text-lg font-bold tracking-tight">Easeway</span>
+            <span className="text-lg font-bold tracking-tight">Kaeme</span>
           </Link>
 
           <div
@@ -407,24 +407,24 @@ export default function ProjectExist({
             return (
               <article
                 key={project.id}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b1020] shadow-[0_14px_45px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-blue-400/30 hover:shadow-[0_20px_55px_rgba(37,99,235,0.12)]"
+                className="group relative isolate overflow-hidden rounded-[26px] border border-blue-300/[0.12] bg-gradient-to-br from-[#10192b] via-[#0b1020] to-[#080d1b] shadow-[0_16px_50px_rgba(0,0,0,0.3)] transition duration-300 hover:-translate-y-1 hover:border-blue-300/30 hover:shadow-[0_24px_70px_rgba(37,99,235,0.16)]"
               >
+                <div className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-blue-500/[0.08] blur-3xl transition duration-500 group-hover:bg-blue-400/[0.14]" />
+                <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-blue-300/50 to-transparent" />
 
-                <div className="absolute left-0 top-0 h-1 w-0 bg-gradient-to-r from-blue-400 to-sky-300 transition-all duration-300 group-hover:w-full" />
-
-                <div className="p-5">
+                <div className="relative z-10 p-5 sm:p-6">
 
                   {/* CARD HEADER */}
                   <div className="flex items-start justify-between gap-3">
 
                     <div className="flex min-w-0 items-center gap-3">
 
-                      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-blue-400/10 text-blue-300">
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-blue-300/15 bg-gradient-to-br from-blue-400/20 to-blue-600/[0.06] text-blue-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
                         <Bell size={23} />
                       </div>
 
                       <div className="min-w-0">
-                        <h3 className="truncate text-base font-bold">
+                        <h3 className="truncate text-lg font-bold tracking-tight text-white">
                           {project.name}
                         </h3>
 
@@ -458,38 +458,41 @@ export default function ProjectExist({
                     )}
                   </div>
 
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
-                      <div className="flex items-center gap-2 text-blue-300">
+                  <div className="mt-5 grid gap-3 sm:grid-cols-[0.9fr_1.1fr]">
+                    <div className="rounded-2xl border border-blue-300/15 bg-gradient-to-br from-blue-500/[0.12] via-[#0d1426] to-[#080d1b] p-4">
+                      <div className="flex items-center gap-2 text-blue-200">
                         <Clock3 size={16} />
-                        <span className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-blue-100/70">
                           Reminder time
                         </span>
                       </div>
-                      <p className="mt-2 text-lg font-semibold text-white">
+                      <p className="mt-3 text-2xl font-bold tracking-tight text-white sm:text-[28px]">
                         {formatTime(project.schedule_time)}
+                      </p>
+                      <p className="mt-1 text-[11px] text-zinc-500">
+                        Local schedule
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
-                      <div className="flex items-center gap-2 text-blue-300">
+                    <div className="rounded-2xl border border-white/[0.07] bg-[#080d1b]/80 p-4">
+                      <div className="flex items-center gap-2 text-blue-200">
                         <CalendarDays size={16} />
-                        <span className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
                           Scheduled days
                         </span>
                       </div>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
+                      <div className="mt-3 flex flex-wrap gap-1.5">
                         {days.length > 0 ? (
                           days.map((day) => (
                             <span
                               key={day.id}
-                              className="rounded-lg border border-blue-400/20 bg-blue-400/10 px-2 py-1 text-[11px] font-medium text-blue-200"
+                              className="rounded-lg border border-blue-300/20 bg-blue-400/[0.09] px-2.5 py-1.5 text-[11px] font-semibold text-blue-100"
                             >
                               {day.days}
                             </span>
                           ))
                         ) : (
-                          <span className="text-sm text-zinc-300">
+                          <span className="rounded-lg border border-white/[0.07] bg-white/[0.03] px-2.5 py-1.5 text-xs font-medium text-zinc-300">
                             One-time reminder
                           </span>
                         )}
@@ -497,14 +500,14 @@ export default function ProjectExist({
                     </div>
                   </div>
 
-                  <div className="mt-3 rounded-xl border border-white/[0.06] bg-[#080d1b] p-4">
+                  <div className="mt-3 rounded-2xl border border-white/[0.07] bg-[#080d1b]/80 p-4">
                     <div className="flex items-start gap-3">
                       <MessageSquare
                         size={17}
-                        className="mt-0.5 shrink-0 text-blue-300"
+                        className="mt-0.5 shrink-0 text-blue-200"
                       />
                       <div className="min-w-0">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-400">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-400">
                           Reminder message
                         </p>
                         <p className="mt-2 line-clamp-3 whitespace-pre-wrap break-words text-sm leading-6 text-zinc-200">
@@ -519,7 +522,7 @@ export default function ProjectExist({
                     onClick={() => toggleDetails(project.id)}
                     aria-expanded={isExpanded}
                     aria-controls={`project-details-${project.id}`}
-                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-xl border border-white/[0.06] px-4 py-3 text-sm font-semibold text-zinc-300 transition hover:border-blue-400/20 hover:bg-blue-400/[0.04] hover:text-white"
+                    className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-xl border border-blue-300/[0.12] bg-blue-400/[0.035] px-4 py-3 text-sm font-semibold text-blue-100/90 transition hover:border-blue-300/25 hover:bg-blue-400/[0.08] hover:text-white"
                   >
                     {isExpanded ? "Show less" : "Show more"}
                     {isExpanded ? (
@@ -532,7 +535,7 @@ export default function ProjectExist({
                   {isExpanded && (
                     <div
                       id={`project-details-${project.id}`}
-                      className="mt-3 grid gap-3 rounded-xl border border-white/[0.06] bg-[#080d1b] p-4 sm:grid-cols-2"
+                      className="mt-3 grid gap-4 rounded-2xl border border-white/[0.07] bg-[#080d1b]/90 p-4 sm:grid-cols-2"
                     >
                       {project.description && (
                         <div className="sm:col-span-2">
